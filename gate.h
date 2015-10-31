@@ -482,6 +482,26 @@ void secondPart(double front) {
 		GLUquadric *quad;
 		quad = gluNewQuadric();
 		gluCylinder(quad, .3, .3, 21, 20, 20);
+		glPushMatrix(); {
+			glColor3f(0, 0, 0);
+			glTranslatef(0, 0, 21);
+			gluCylinder(quad, .4, .5, 1, 20, 20);
+			glPushMatrix(); {
+				glTranslatef(0, 0, 1);
+				glScalef(.05, .05, .05);
+				dome(false);
+			}
+			glPopMatrix();
+		}
+		glPopMatrix();
+		glPushMatrix(); {
+			for (int i = 0; i < 3; i++) {
+				glTranslatef(0, 0, 5);
+				glColor3f(0, 0, 0);
+				gluCylinder(quad, .4, .4, 1, 20, 20);
+			}
+		}
+		glPopMatrix();
 
 	}
 	glPopMatrix();
@@ -1700,6 +1720,54 @@ void watchTower() {
 	
 }
 
+void baseWall(int i) {
+	double x = 5.7 * i;
+	glColor3f(0.7, 0, 1);
+	glBegin(GL_QUADS); {	//front
+		glVertex3f(x, 0, 0);
+		glVertex3f(x, 0, 10);
+		glVertex3f(x + 5.7, 0, 10);
+		glVertex3f(x + 5.7, 0, 0);
+	}
+	glEnd();
+	glPushMatrix(); {
+		glScalef(0.7, 0.7, 1);
+		glTranslatef(95, 0, 0);
+		GLUquadric *quad = gluNewQuadric();
+		gluCylinder(quad, 15, 15, 10, 8, 50);
+	}
+	glPopMatrix();
+}
+
+void baseWallRight(int i) {
+	double y = 5.7 * i;
+	glColor3f(0.7, 0, 1);
+	glBegin(GL_QUADS); {	//front
+		glVertex3f(70, y, 0);
+		glVertex3f(70, y, 10);
+		glVertex3f(70, y + 5.7, 10);
+		glVertex3f(70, y + 5.7, 0);
+	}
+	glEnd();
+	glPushMatrix(); {
+		glScalef(0.7, 0.7, 1);
+		glTranslatef(95, 0, 0);
+		GLUquadric *quad = gluNewQuadric();
+		gluCylinder(quad, 15, 15, 10, 8, 50);
+	}
+	glPopMatrix();
+}
+
+void base() {
+	glColor3f(0.7, 0.7, 1);
+	glBegin(GL_QUADS); {	//front
+		glVertex3f(0, 0, -1);
+		glVertex3f(0, 86, -1);
+		glVertex3f(69.5, 86, -1);
+		glVertex3f(69.5, 0, -1);
+	}
+	glEnd();
+}
 
 void part() {
 	firstPart(1);
@@ -1720,6 +1788,22 @@ void part() {
 		watchTower();
 	}
 	glPopMatrix();
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix(); {
+			glTranslatef(0, 0, -10);
+			baseWall(i);
+			
+		}
+		glPopMatrix();
+	}
+	for (int i = 0; i < 15; i++) {
+		glPushMatrix(); {
+			glTranslatef(0, 0, -10);
+			baseWallRight(i);
+		}
+		glPopMatrix();
+	}
+	base();
 }
 
 void drawTowers() {
