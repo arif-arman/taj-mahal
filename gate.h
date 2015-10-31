@@ -3,6 +3,7 @@
 using namespace std;
 #include<math.h>
 
+
 void gateTop() {
 	//glScalef(3, 2, 1);
 	glPushMatrix(); {
@@ -77,6 +78,151 @@ void gateTopSym() {
 		gateTop();
 	}
 	glPopMatrix();
+}
+
+void domeTop() {
+	GLUquadric *quad = gluNewQuadric();
+	// base
+	glColor3f(0.3, 0.3, 0.3);
+	gluCylinder(quad, 6, 2, 3, 20, 20);
+	// first cylinder
+	glPushMatrix(); {
+		glTranslatef(0, 0, 3);
+		glColor3f(1, 1, 0);
+		gluCylinder(quad, 2, 1, 1, 20, 20);
+	}
+	glPopMatrix();
+	// first golla
+	glPushMatrix(); {
+		glTranslatef(0, 0, 5);
+		gluSphere(quad, 1.5, 200, 200);
+
+	}
+	glPopMatrix();
+	// second golla, cut
+	glPushMatrix(); {
+		glTranslatef(0, 0, 8.5);
+		double equ[4];
+		equ[0] = 0; equ[1] = 0; equ[2] = -1; equ[3] = 1.5;
+		glClipPlane(GL_CLIP_PLANE0, equ);
+		glEnable(GL_CLIP_PLANE0); {
+			gluSphere(quad, 2, 200, 200);
+		}
+		glDisable(GL_CLIP_PLANE0);
+
+	}
+	glPopMatrix();
+	// second cylinder
+	glPushMatrix(); {
+		glTranslatef(0, 0, 10);
+		gluCylinder(quad, 1.3, 0.3, 2, 200, 200);
+
+	}
+	glPopMatrix();
+	// flat cylinder
+	glPushMatrix(); {
+		glTranslatef(0, 0, 12);
+		gluCylinder(quad, 0.7, 0.7, 0.3, 200, 200);
+
+	}
+	glPopMatrix();
+	// third golla
+	glPushMatrix(); {
+		glTranslatef(0, 0, 13.3);
+		double equ[4];
+		equ[0] = 0; equ[1] = 0; equ[2] = -1; equ[3] = 0.9;
+		glClipPlane(GL_CLIP_PLANE0, equ);
+		glEnable(GL_CLIP_PLANE0); {
+			gluSphere(quad, 1, 200, 200);
+		}
+		glDisable(GL_CLIP_PLANE0);
+	}
+	glPopMatrix();
+	// third cylinder
+	glPushMatrix(); {
+		glTranslatef(0, 0, 14.1);
+		gluCylinder(quad, 0.3, 0.1, 2, 200, 200);
+
+	}
+	glPopMatrix();
+	// final choto golla
+	glPushMatrix(); {
+		glTranslatef(0, 0, 16.5);
+		gluSphere(quad, 0.5, 200, 200);
+	}
+	glPopMatrix();
+	// final chokhkha cylinder
+	glPushMatrix(); {
+		glTranslatef(0, 0, 17);
+		gluCylinder(quad, 0.2, 0.1, 1.5, 200, 200);
+
+	}
+	glPopMatrix();
+
+}
+
+void dome(bool main) {
+	GLUquadric *quad = gluNewQuadric();
+	if (main) {
+		// base
+
+		gluCylinder(quad, 6, 6, 3, 200, 200);
+		// second base
+		glPushMatrix(); {
+			glTranslatef(0, 0, 3);
+			glColor3f(0, 1, 0);
+			gluCylinder(quad, 6, 6, 2, 200, 200);
+		}
+		glPopMatrix();
+		// third base angular white
+		glPushMatrix(); {
+			glTranslatef(0, 0, 5);
+			glColor3f(1, 1, 1);
+			gluCylinder(quad, 6, 6.8, 1.5, 200, 200);
+		}
+		glPopMatrix();
+
+	}
+	// fourth base, angular gray
+	glPushMatrix(); {
+		glTranslatef(0, 0, 6.5);
+		glColor3f(0, 1, 0);
+		gluCylinder(quad, 6.8, 7, .5, 200, 200);
+	}
+	glPopMatrix();
+	glColor3f(1, 0, 0);
+	glPushMatrix(); {
+		glTranslatef(0, 0, 7);
+		glScalef(1, 1, 1.2);
+		double equ[4];
+		equ[0] = 0; equ[1] = 0; equ[2] = 1; equ[3] = 0;
+		glClipPlane(GL_CLIP_PLANE0, equ);
+		glEnable(GL_CLIP_PLANE0); {
+			glPushMatrix(); {
+				double equ1[4];
+				equ1[0] = 0; equ1[1] = 0; equ1[2] = -1; equ1[3] = 6.5;
+				glClipPlane(GL_CLIP_PLANE1, equ1);
+				glEnable(GL_CLIP_PLANE1); {
+					glColor3f(1, 1, 1);
+					gluSphere(quad, 7, 200, 200);
+				}
+				glDisable(GL_CLIP_PLANE1);
+
+			}
+			glPopMatrix();
+		}
+		glDisable(GL_CLIP_PLANE0);
+	}
+	glPopMatrix();
+	glPushMatrix(); {
+		glTranslatef(0, 0, 14.5);
+		glScalef(0.5, 0.5, 0.5);
+		domeTop();
+	}
+	glPopMatrix();
+
+
+
 }
 
 void firstPart(double front) {
@@ -256,7 +402,31 @@ void firstPart(double front) {
 		GLUquadric *quad;
 		quad = gluNewQuadric();
 		gluCylinder(quad, .3, .3, 27, 20, 20);
+		glPushMatrix(); {
+			glColor3f(0, 0, 0);
+			glTranslatef(0, 0, 27);
+			gluCylinder(quad, .4, .5, 1, 20, 20);
+			glPushMatrix(); {
+				glTranslatef(0, 0, 1);
+				glScalef(.05, .05, .05);
+				dome(false);
+			}
+			glPopMatrix();
+		}
+		glPopMatrix();
+		glPushMatrix(); {
+			for (int i = 0; i < 4; i++) {
+				glTranslatef(0, 0, 5);
 
+				
+				glColor3f(0, 0, 0);
+				gluCylinder(quad, .4, .4, 1, 20, 20);
+			
+			
+			}
+		}
+		glPopMatrix();
+		
 	}
 	glPopMatrix();
 }
@@ -1021,151 +1191,6 @@ void back() {
 	firstPart(-1);
 }
 
-void domeTop() {
-	GLUquadric *quad = gluNewQuadric();
-	// base
-	glColor3f(0.3, 0.3, 0.3);
-	gluCylinder(quad, 6, 2, 3, 20, 20);
-	// first cylinder
-	glPushMatrix(); {
-		glTranslatef(0, 0, 3);
-		glColor3f(1, 1, 0);
-		gluCylinder(quad, 2, 1, 1, 20, 20);
-	}
-	glPopMatrix();
-	// first golla
-	glPushMatrix(); {
-		glTranslatef(0, 0, 5);
-		gluSphere(quad, 1.5, 200, 200);
-		
-	}
-	glPopMatrix();
-	// second golla, cut
-	glPushMatrix(); {
-		glTranslatef(0, 0, 8.5);
-		double equ[4];
-		equ[0] = 0; equ[1] = 0; equ[2] = -1; equ[3] = 1.5;
-		glClipPlane(GL_CLIP_PLANE0, equ);
-		glEnable(GL_CLIP_PLANE0); {
-			gluSphere(quad, 2, 200, 200);
-		}
-		glDisable(GL_CLIP_PLANE0);
-
-	}
-	glPopMatrix();
-	// second cylinder
-	glPushMatrix(); {
-		glTranslatef(0, 0, 10);
-		gluCylinder(quad, 1.3, 0.3, 2, 200, 200);
-
-	}
-	glPopMatrix();
-	// flat cylinder
-	glPushMatrix(); {
-		glTranslatef(0, 0, 12);
-		gluCylinder(quad, 0.7, 0.7, 0.3, 200, 200);
-
-	}
-	glPopMatrix();
-	// third golla
-	glPushMatrix(); {
-		glTranslatef(0, 0, 13.3);
-		double equ[4];
-		equ[0] = 0; equ[1] = 0; equ[2] = -1; equ[3] = 0.9;
-		glClipPlane(GL_CLIP_PLANE0, equ);
-		glEnable(GL_CLIP_PLANE0); {
-			gluSphere(quad, 1, 200, 200);
-		}
-		glDisable(GL_CLIP_PLANE0);
-	}
-	glPopMatrix();
-	// third cylinder
-	glPushMatrix(); {
-		glTranslatef(0, 0, 14.1);
-		gluCylinder(quad, 0.3, 0.1, 2, 200, 200);
-
-	}
-	glPopMatrix();
-	// final choto golla
-	glPushMatrix(); {
-		glTranslatef(0, 0, 16.5);
-		gluSphere(quad, 0.5, 200, 200);
-	}
-	glPopMatrix();
-	// final chokhkha cylinder
-	glPushMatrix(); {
-		glTranslatef(0, 0, 17);
-		gluCylinder(quad, 0.2, 0.1, 1.5, 200, 200);
-
-	}
-	glPopMatrix();
-	
-}
-
-void dome(bool main) {
-	GLUquadric *quad = gluNewQuadric();
-	if (main) {
-		// base
-		
-		gluCylinder(quad, 6, 6, 3, 200, 200);
-		// second base
-		glPushMatrix(); {
-			glTranslatef(0, 0, 3);
-			glColor3f(0, 1, 0);
-			gluCylinder(quad, 6, 6, 2, 200, 200);
-		}
-		glPopMatrix();
-		// third base angular white
-		glPushMatrix(); {
-			glTranslatef(0, 0, 5);
-			glColor3f(1, 1, 1);
-			gluCylinder(quad, 6, 6.8, 1.5, 200, 200);
-		}
-		glPopMatrix();
-		
-	}
-	// fourth base, angular gray
-	glPushMatrix(); {
-		glTranslatef(0, 0, 6.5);
-		glColor3f(0, 1, 0);
-		gluCylinder(quad, 6.8, 7, .5, 200, 200);
-	}
-	glPopMatrix();
-	glColor3f(1, 0, 0);
-	glPushMatrix(); {
-		glTranslatef(0, 0, 7);
-		glScalef(1, 1, 1.2);
-		double equ[4];
-		equ[0] = 0; equ[1] = 0; equ[2] = 1; equ[3] = 0;
-		glClipPlane(GL_CLIP_PLANE0, equ);
-		glEnable(GL_CLIP_PLANE0); {
-			glPushMatrix(); {
-				double equ1[4];
-				equ1[0] = 0; equ1[1] = 0; equ1[2] = -1; equ1[3] = 6.5;
-				glClipPlane(GL_CLIP_PLANE1, equ1);
-				glEnable(GL_CLIP_PLANE1); {
-					glColor3f(1, 1, 1);
-					gluSphere(quad, 7, 200, 200);
-				}
-				glDisable(GL_CLIP_PLANE1);
-				
-			}
-			glPopMatrix();
-		}
-		glDisable(GL_CLIP_PLANE0);
-	}
-	glPopMatrix();
-	glPushMatrix(); {
-		glTranslatef(0, 0, 14.5);
-		glScalef(0.5, 0.5, 0.5);
-		domeTop();
-	}
-	glPopMatrix();
-
-	
-
-}
-
 void sentryRoom(bool roof) {
 	GLUquadric *quad = gluNewQuadric();
 	
@@ -1415,6 +1440,267 @@ void smallWall(int i) {
 	glEnd();
 }
 
+void watchTower() {
+	// bottom
+	GLUquadric *quad = gluNewQuadric();
+	gluCylinder(quad, 15, 15, 10, 8, 50);
+	glPushMatrix(); {
+		glPushMatrix(); {
+			glColor3f(1, 0, 1);
+			glTranslatef(0, 0, 10);
+			gluCylinder(quad, 17, 17, 2, 8, 100);
+			// floor
+			glColor3f(0, 1, 0);
+			glBegin(GL_QUADS); {
+				glVertex3f(12, 12, 0);
+				glVertex3f(12, -12, 0);
+				glVertex3f(-12, -12, 0);
+				glVertex3f(-12, 12, 0);
+			}
+			glEnd();
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(12, 12, 0);
+				glVertex3f(12, -12, 0);
+				glVertex3f(15, 0, 0);
+			}
+			glEnd();
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(-12, 12, 0);
+				glVertex3f(-12, -12, 0);
+				glVertex3f(-15, 0, 0);
+			}
+			glEnd();
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(12, 12, 0);
+				glVertex3f(-12, 12, 0);
+				glVertex3f(0, 15, 0);
+			}
+			glEnd();
+
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(12, -12, 0);
+				glVertex3f(-12, -12, 0);
+				glVertex3f(0, -15, 0);
+			}
+			glEnd();
+		}
+		glPopMatrix();	
+		// second base khaj
+		glTranslatef(0, 0, 7);
+		glColor3f(1, 1, 1);
+		for (int i = 0; i < 8; i++) {
+			double theta = (2 * 3.1416 / 8) * i;
+			double r = 17;
+			double x1 = r*sin(theta);
+			double y1 = r*cos(theta);
+			double theta2 = (2 * 3.1416 / 8) * ((i + 1) % 8);
+			double x2 = r*sin(theta2);
+			double y2 = r*cos(theta2);
+			double delx = (x2 - x1) / 3;
+			double dely = (y2 - y1) / 3;
+			r = 15;
+			double x3 = r*sin(theta);
+			double y3 = r*cos(theta);
+			double x4 = r*sin(theta2);
+			double y4 = r*cos(theta2);
+			double delx2 = (x4 - x3) / 3;
+			double dely2 = (y4 - y3) / 3;
+			for (int j = 0; j < 3; j++) {
+				glPushMatrix(); {
+					glTranslatef(x1 + delx*j, y1 + dely*j, 3);
+					gluCylinder(quad, 0.3, 0.3, 2.1, 4, 100);
+					
+
+				}
+				glPopMatrix();
+				glPushMatrix(); {
+					glTranslatef(0, 0, 3);
+					glBegin(GL_QUADS); {
+						glVertex3f(x1 + delx*j, y1 + dely*j, 0);
+						glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
+						glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
+						glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
+
+					}
+					glEnd();
+				}
+				glPopMatrix();
+			}
+
+		}
+	}
+	glPopMatrix();
+	// third base
+	glPushMatrix(); {
+		glTranslatef(0, 0, 9);
+		// vitorer cylinder (main room)
+		for (double i = 0; i < 0.5; i += 0.1) {
+			glPushMatrix(); {
+				glColor3f(1, 0, 0);
+				glTranslatef(0, 0, 2);
+				gluCylinder(quad, 13 - i, 13 - i, 1, 8, 100);
+			}
+			glPopMatrix();
+		}
+		// columns
+		for (int i = 0; i < 8; i++) {
+			double theta = (2 * 3.1416 / 8) * i;
+			double r = 13;
+			double x1 = r*sin(theta);
+			double y1 = r*cos(theta);
+			double theta2 = (2 * 3.1416 / 8) * ((i + 1) % 8);
+			double x2 = r*sin(theta2);
+			double y2 = r*cos(theta2);
+			double delx = (x2 - x1) / 3;
+			double dely = (y2 - y1) / 3;
+			for (int j = 0; j < 3; j++) {
+				glPushMatrix(); {
+					glTranslatef(x1 + delx*j, y1 + dely*j, 3);
+					//gluCylinder(quad, 0.3, 0.3, 2.1, 4, 100);
+					glColor3f(1, 0, 0);
+					gluCylinder(quad, 0.3, 0.3, 1, 60, 100);
+					glColor3f(1, 1, 0);
+					gluCylinder(quad, 0.2, 0.2, 5, 60, 100);
+					glPushMatrix(); {
+						glTranslatef(0, 0, 5);
+						glColor3f(1, 0, 0);
+						gluCylinder(quad, 0.3, 0.3, 2, 60, 100);
+					}
+					glPopMatrix();
+
+				}
+				glPopMatrix();
+				
+			}
+
+		}
+		// triangular small gates
+		for (int i = 0; i < 8; i++) {
+			double theta = (2 * 3.1416 / 8) * i;
+			double r = 13;
+			double x1 = r*sin(theta);
+			double y1 = r*cos(theta);
+			double z1 = 8;
+			double theta2 = (2 * 3.1416 / 8) * ((i + 1) % 8);
+			double x2 = r*sin(theta2);
+			double y2 = r*cos(theta2);
+			double z2 = 10;
+			glBegin(GL_QUADS); {
+				glVertex3f(x1, y1, z2);
+				glVertex3f(x1, y1, z1);
+				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
+				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
+			}
+			glEnd();
+			glBegin(GL_QUADS); {
+				glVertex3f(x2, y2, z2);
+				glVertex3f(x2, y2, z1);
+				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
+				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
+			}
+			glEnd();
+		}
+
+		
+	}
+	glPopMatrix();
+	// fourth base
+	glPushMatrix(); {
+		glPushMatrix(); {
+			glColor3f(1, 0, 1);
+			glTranslatef(0, 0, 20);
+			gluCylinder(quad, 17, 17, 2, 8, 100);
+			// floor
+			glColor3f(0, 1, 0);
+			glBegin(GL_QUADS); {
+				glVertex3f(12, 12, 0);
+				glVertex3f(12, -12, 0);
+				glVertex3f(-12, -12, 0);
+				glVertex3f(-12, 12, 0);
+			}
+			glEnd();
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(12, 12, 0);
+				glVertex3f(12, -12, 0);
+				glVertex3f(15, 0, 0);
+			}
+			glEnd();
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(-12, 12, 0);
+				glVertex3f(-12, -12, 0);
+				glVertex3f(-15, 0, 0);
+			}
+			glEnd();
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(12, 12, 0);
+				glVertex3f(-12, 12, 0);
+				glVertex3f(0, 15, 0);
+			}
+			glEnd();
+
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(12, -12, 0);
+				glVertex3f(-12, -12, 0);
+				glVertex3f(0, -15, 0);
+			}
+			glEnd();
+		}
+		glPopMatrix();
+		// second base khaj
+		glTranslatef(0, 0, 17);
+		glColor3f(1, 1, 1);
+		for (int i = 0; i < 8; i++) {
+			double theta = (2 * 3.1416 / 8) * i;
+			double r = 17;
+			double x1 = r*sin(theta);
+			double y1 = r*cos(theta);
+			double theta2 = (2 * 3.1416 / 8) * ((i + 1) % 8);
+			double x2 = r*sin(theta2);
+			double y2 = r*cos(theta2);
+			double delx = (x2 - x1) / 3;
+			double dely = (y2 - y1) / 3;
+			r = 15;
+			double x3 = r*sin(theta);
+			double y3 = r*cos(theta);
+			double x4 = r*sin(theta2);
+			double y4 = r*cos(theta2);
+			double delx2 = (x4 - x3) / 3;
+			double dely2 = (y4 - y3) / 3;
+			for (int j = 0; j < 3; j++) {
+				glPushMatrix(); {
+					glTranslatef(x1 + delx*j, y1 + dely*j, 3);
+					gluCylinder(quad, 0.3, 0.3, 2.1, 4, 100);
+
+
+				}
+				glPopMatrix();
+				glPushMatrix(); {
+					glTranslatef(0, 0, 3);
+					glBegin(GL_QUADS); {
+						glVertex3f(x1 + delx*j, y1 + dely*j, 0);
+						glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
+						glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
+						glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
+
+					}
+					glEnd();
+				}
+				glPopMatrix();
+			}
+
+		}
+	}
+	glPopMatrix();
+	glPushMatrix(); {
+		glScalef(1.5, 1.5, 1.5);
+		glTranslatef(0, 0, 14);
+		sentryRoom(false);
+	}
+	glPopMatrix();
+	
+}
+
+
 void part() {
 	firstPart(1);
 	secondPart(1);
@@ -1428,6 +1714,12 @@ void part() {
 	for (int i = 0; i < 6; i++) {
 		smallWall(i);
 	}
+	glPushMatrix(); {
+		glScalef(0.7, 0.7, 0.7);
+		glTranslatef(95, 0, 0);
+		watchTower();
+	}
+	glPopMatrix();
 }
 
 void drawTowers() {
@@ -1461,6 +1753,7 @@ void drawGate() {
 	drawTowers();
 	
 	//gateTop();
+	//watchTower();
 
 	
 }
