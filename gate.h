@@ -3,6 +3,82 @@
 using namespace std;
 #include<math.h>
 
+void gateTop() {
+	//glScalef(3, 2, 1);
+	glPushMatrix(); {
+		glRotatef(90, 1, 0, 0);
+		double equ[4];
+		equ[0] = 1; equ[1] = 0; equ[2] = 0; equ[3] = 0;
+		glClipPlane(GL_CLIP_PLANE0, equ);
+		glEnable(GL_CLIP_PLANE0); {
+
+			equ[0] = 0; equ[1] = 1; equ[2] = 0; equ[3] = 0;
+			glClipPlane(GL_CLIP_PLANE1, equ);
+			glEnable(GL_CLIP_PLANE1); {
+				equ[0] = 0; equ[1] = -1; equ[2] = 0; equ[3] = 15;
+				glClipPlane(GL_CLIP_PLANE2, equ);
+				glEnable(GL_CLIP_PLANE2); {
+					equ[0] = -1; equ[1] = 0; equ[2] = 0; equ[3] = 10;
+					glClipPlane(GL_CLIP_PLANE3, equ);
+					glEnable(GL_CLIP_PLANE3); {
+						glBegin(GL_QUADS); {
+							glVertex3f(0, 10, 1);
+							glVertex3f(0, 20, 1);
+							glVertex3f(15, 20, 1);
+							glVertex3f(15, 10, 1);
+						}
+						glEnd();
+						double delta = 2 * 3.1416 / 200;
+						double theta = 0;
+						for (double i = 0; i < 200; i++) {
+							double theta2 = theta + delta;
+							double x1 = 10 * cos(theta);
+							double y1 = 10 * sin(theta);
+							double x2 = 10 * cos(theta2);
+							double y2 = 10 * sin(theta2);
+							if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0) {
+								glBegin(GL_QUADS); {
+									glVertex3f(x1, y1, 1);
+									glVertex3f(x2, y2, 1);
+									glVertex3f(x2 + 20, y2 + 2, 1);
+									glVertex3f(x1 + 20, y2 - 2, 1);
+								}
+								glEnd();
+
+							}
+							theta = theta2;
+							//gluCylinder(quad, r, r, 5, 100, 100);
+						}
+						
+					}
+					glDisable(GL_CLIP_PLANE3);
+
+				}
+				glDisable(GL_CLIP_PLANE2);
+
+			}
+			glDisable(GL_CLIP_PLANE1);
+		}
+		glDisable(GL_CLIP_PLANE0);
+		
+	}
+	glPopMatrix();
+	
+}
+
+void gateTopSym() {
+	glPushMatrix(); {
+		gateTop();
+	}
+	glPopMatrix();
+	
+	glPushMatrix(); {
+		glScalef(-1, 1, 1);
+		gateTop();
+	}
+	glPopMatrix();
+}
+
 void firstPart(double front) {
 	double y = 0;
 	if (front == -1) y = 20;
@@ -11,14 +87,14 @@ void firstPart(double front) {
 	glBegin(GL_QUADS); {
 		glVertex3f(0, y+6*front, 0);
 		glVertex3f(6.5, y + 6 * front, 0);
-		glVertex3f(6.5, y + 6 * front, 10);
-		glVertex3f(0, y + 6 * front, 10);
+		glVertex3f(6.5, y + 6 * front, 18);
+		glVertex3f(0, y + 6 * front, 18);
 	}
 	glEnd();
 	glBegin(GL_QUADS); {
 		glVertex3f(6.5, y + 0 * front, 0);
-		glVertex3f(6.5, y + 0 * front, 10);
-		glVertex3f(6.5, y + 6 * front, 10);
+		glVertex3f(6.5, y + 0 * front, 12);
+		glVertex3f(6.5, y + 6 * front, 12);
 		glVertex3f(6.5, y + 6 * front, 0);
 	}
 	glColor3f(0, 1, 0);
@@ -29,6 +105,46 @@ void firstPart(double front) {
 		glVertex3f(0, y + 6 * front, 0);
 	}
 	glEnd();
+	// inner part curvy
+	glColor3f(0, 1, 1);
+	if (front == 1){
+		glPushMatrix(); {
+			glTranslatef(0, 1, 10);
+			glScalef(.65, 1, .5);
+			gateTop();
+		}
+		glPopMatrix();
+	}
+	else {
+		glPushMatrix(); {
+			glTranslatef(0, 21, 10);
+			glScalef(.65, 1, .5);
+			gateTop();
+		}
+		glPopMatrix();
+	}
+	/*
+	glBegin(GL_TRIANGLES); {
+		glVertex3f(0, y + 0 * front, 15);
+		glVertex3f(6.5, y + 0 * front, 12);
+		glVertex3f(6.5, y + 6 * front, 12);
+	}
+	glEnd();
+	glBegin(GL_TRIANGLES); {
+		glVertex3f(0, y + 0 * front, 15);
+		glVertex3f(0, y + 6 * front, 12);
+		glVertex3f(6.5, y + 6 * front, 12);
+	}
+	glEnd();
+	glColor3f(1, 0, 0);
+	glBegin(GL_QUADS); {
+		glVertex3f(0, y + 0 * front, 15);
+		glVertex3f(0, y + 0 * front, 18);
+		glVertex3f(6.5, y + 0 * front, 18);
+		glVertex3f(6.5, y + 0 * front, 12);
+	}
+	glEnd();
+	*/
 	// border of gate
 	glColor3f(1, 1, 0);
 
@@ -277,22 +393,22 @@ void secondPart(double front) {
 	glColor3f(1, 0, 0);
 	glBegin(GL_QUADS); { // left
 		glVertex3f(13, y + 0, 0);
-		glVertex3f(13, y + 0, 5);
-		glVertex3f(13, y + 3*front, 5);
+		glVertex3f(13, y + 0, 10);
+		glVertex3f(13, y + 3*front, 10);
 		glVertex3f(13, y + 3*front, 0);
 	}
 	glEnd();
 	glBegin(GL_QUADS); { // right
 		glVertex3f(19, y+0, 0);
-		glVertex3f(19, y+0, 5);
-		glVertex3f(19, y + 3 * front, 5);
+		glVertex3f(19, y+0, 10);
+		glVertex3f(19, y + 3 * front, 10);
 		glVertex3f(19, y + 3 * front, 0);
 	}
 	glEnd();
 	glBegin(GL_QUADS); { // back
 		glVertex3f(13, y + 3 * front, 0);
-		glVertex3f(13, y + 3 * front, 5);
-		glVertex3f(19, y + 3 * front, 5);
+		glVertex3f(13, y + 3 * front, 10);
+		glVertex3f(19, y + 3 * front, 10);
 		glVertex3f(19, y + 3 * front, 0);
 	}
 	glEnd();
@@ -305,6 +421,60 @@ void secondPart(double front) {
 		glVertex3f(19, y+0, 0);
 	}
 	glEnd();
+	// chamber top curve
+	if (front == 1) {
+		glPushMatrix(); {
+			glTranslatef(16, 0.5, 5);
+			glScalef(0.3, 0.6, 0.3);
+			gateTopSym();
+		}
+		glPopMatrix();
+	}
+	else {
+		glPushMatrix(); {
+			glTranslatef(16, 20.7, 5);
+			glScalef(0.3, 0.6, 0.3);
+			gateTopSym();
+		}
+		glPopMatrix();
+	}
+	
+	/*
+	glColor3f(0, 1, 0);
+	glBegin(GL_TRIANGLES); { 
+		glVertex3f(13, y + 0 * front, 6);
+		glVertex3f(13, y + 3 * front, 6);
+		glVertex3f(16, y + 0 * front, 8);
+	}
+	glEnd();
+	glBegin(GL_TRIANGLES); {
+		glVertex3f(19, y + 0 * front, 6);
+		glVertex3f(19, y + 3 * front, 6);
+		glVertex3f(16, y + 0 * front, 8);
+	}
+	glEnd();
+	glBegin(GL_TRIANGLES); {
+		glVertex3f(13, y + 3 * front, 6);
+		glVertex3f(19, y + 3 * front, 6);
+		glVertex3f(16, y + 0 * front, 8);
+	}
+	glEnd();
+	glColor3f(1, 0, 0);
+	glBegin(GL_QUADS); {
+		glVertex3f(13, y + 0 * front, 6);
+		glVertex3f(13, y + 0 * front, 10);
+		glVertex3f(16, y + 0 * front, 10);
+		glVertex3f(16, y + 0 * front, 8);
+	}
+	glEnd();
+	glBegin(GL_QUADS); {
+		glVertex3f(19, y + 0 * front, 6);
+		glVertex3f(19, y + 0 * front, 10);
+		glVertex3f(16, y + 0 * front, 10);
+		glVertex3f(16, y + 0 * front, 8);
+	}
+	glEnd();
+	*/
 	// upper white jinish
 	glColor3f(1, 1, 1);
 	glBegin(GL_QUADS); {
@@ -585,22 +755,22 @@ void rightSym(double x) {
 	glColor3f(1, 0, 0);
 	glBegin(GL_QUADS); { // left
 		glVertex3f(28.1, x + 0.8, 0);
-		glVertex3f(28.1, x + 0.8, 4);
-		glVertex3f(25.1, x + 0.8, 4);
+		glVertex3f(28.1, x + 0.8, 9);
+		glVertex3f(25.1, x + 0.8, 9);
 		glVertex3f(25.1, x + 0.8, 0);
 	}
 	glEnd();
 	glBegin(GL_QUADS); { // right
 		glVertex3f(28.1, x + 5 - 0.8, 0);
-		glVertex3f(28.1, x + 5 - 0.8, 4);
-		glVertex3f(25.1, x + 5 - 0.8, 4);
+		glVertex3f(28.1, x + 5 - 0.8, 9);
+		glVertex3f(25.1, x + 5 - 0.8, 9);
 		glVertex3f(25.1, x + 5 - 0.8, 0);
 	}
 	glEnd();
 	glBegin(GL_QUADS); { // back
 		glVertex3f(25.1, x + 0.8, 0);
-		glVertex3f(25.1, x + 0.8, 4);
-		glVertex3f(25.1, x + 5 - 0.8, 4);
+		glVertex3f(25.1, x + 0.8, 9);
+		glVertex3f(25.1, x + 5 - 0.8, 9);
 		glVertex3f(25.1, x + 5 - 0.8, 0);
 	}
 	glEnd();
@@ -612,6 +782,15 @@ void rightSym(double x) {
 		glVertex3f(25.1, x + 0.8, 0);
 	}
 	glEnd();
+	// chamber top
+	glPushMatrix(); {
+		glColor3f(0, 1, 0);
+		glTranslatef(27.8, x + 2.5, 4.5);
+		glScalef(0.2, 0.15, 0.15);
+		glRotatef(90, 0, 0, 1);
+		gateTopSym();
+	}
+	glPopMatrix();
 	// middle
 	glColor3f(1, 1, 0);
 	glBegin(GL_QUADS); { // right
@@ -1175,10 +1354,63 @@ void roof() {
 	
 }
 
-void smallWall() {
-	double x = 28;
-	glBegin(GL_QUADS); {
-
+void smallWall(int i) {
+	double x = 28 + 5*i;
+	glColor3f(1, 0, 0);
+	glBegin(GL_QUADS); {	//front
+		glVertex3f(x, 0, 0);
+		glVertex3f(x, 0, 5);
+		glVertex3f(x+5, 0, 5);
+		glVertex3f(x+5, 0, 0);
+	}
+	glEnd();
+	
+	glBegin(GL_QUADS); {	//back
+		glVertex3f(x, 5, 0);
+		glVertex3f(x, 5, 5);
+		glVertex3f(x + 5, 5, 5);
+		glVertex3f(x + 5, 5, 0);
+	}
+	glEnd();
+	glBegin(GL_QUADS); {	//top
+		glVertex3f(x, 0, 5);
+		glVertex3f(x, 5, 5);
+		glVertex3f(x + 5, 5, 5);
+		glVertex3f(x + 5, 0, 5);
+	}
+	glEnd(); 
+	if (i == 0) {
+		glBegin(GL_QUADS); {
+			glVertex3f(x, 0, 6);
+			glVertex3f(x, 0, 5);
+			glVertex3f(x, 5, 5);
+			glVertex3f(x, 5, 6);
+		}
+		glEnd();
+	}
+	else if (i == 5) {
+		glBegin(GL_QUADS); {
+			glVertex3f(x+5, 0, 6);
+			glVertex3f(x+5, 0, 5);
+			glVertex3f(x+5, 5, 5);
+			glVertex3f(x+5, 5, 6);
+		}
+		glEnd();
+	}
+	
+	glColor3f(0, 0, 1);
+	glBegin(GL_QUADS); {	//front
+		glVertex3f(x, 0, 6);
+		glVertex3f(x, 0, 5);
+		glVertex3f(x + 5, 0, 5);
+		glVertex3f(x + 5, 0, 6);
+	}
+	glEnd();
+	glBegin(GL_QUADS); {	//back
+		glVertex3f(x, 5, 6);
+		glVertex3f(x, 5, 5);
+		glVertex3f(x + 5, 5, 5);
+		glVertex3f(x + 5, 5, 6);
 	}
 	glEnd();
 }
@@ -1193,32 +1425,43 @@ void part() {
 	}
 	back();
 	roof();
-	smallWall();
+	for (int i = 0; i < 6; i++) {
+		smallWall(i);
+	}
+}
+
+void drawTowers() {
+	glPushMatrix(); {
+		glTranslatef(0, 9, 18);
+		dome(true);
+	}
+	glPopMatrix();
+	glPushMatrix(); {
+		glTranslatef(-15, 9, 18);
+		glScalef(0.7, 0.7, 0.7);
+		dome(true);
+	}
+	glPopMatrix();
+	glPushMatrix(); {
+		glTranslatef(15, 9, 18);
+		glScalef(0.7, 0.7, 0.7);
+		dome(true);
+	}
+	glPopMatrix();
 }
 
 void drawGate() {
+	
 	part();
 	glPushMatrix(); {
 		glScalef(-1, 1, 1);
 		part();
 	}
 	glPopMatrix();
-	glPushMatrix(); {
-	glTranslatef(0, 9, 18);
-	dome(true);
-	}
-	glPopMatrix();
-	glPushMatrix(); {
-	glTranslatef(-15, 9, 18);
-	glScalef(0.7, 0.7, 0.7);
-	dome(true);
-	}
-	glPopMatrix();
-	glPushMatrix(); {
-	glTranslatef(15, 9, 18);
-	glScalef(0.7, 0.7, 0.7);
-	dome(true);
-	}
-	glPopMatrix();
+	drawTowers();
+	
+	//gateTop();
+
+	
 }
 
