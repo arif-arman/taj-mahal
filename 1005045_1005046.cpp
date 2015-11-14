@@ -28,7 +28,7 @@ void display(){
 	glPushMatrix();
 	glTranslatef(0, 0, 4);
 	makeTaj();
-	//baseTaj();
+	baseTaj();
 	glPopMatrix();
 	
 	//now give three info

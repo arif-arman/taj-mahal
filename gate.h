@@ -5,7 +5,7 @@ using namespace std;
 #include "texture.h"
 
 GLuint basewall, smallwall, smallwall_top, border, thirdpart, chamber, chamber_side, white_jinish, white_rect, dome_tex, back_tower, back_tower_base, base_tex;
-
+GLuint basetaj, floortaj, towertaj, taj;
 void gateLoadBMP() {
 	basewall = LoadBitmap("img/basewall.bmp");
 	smallwall = LoadBitmap("img/smallwall.bmp");
@@ -20,6 +20,10 @@ void gateLoadBMP() {
 	back_tower = LoadBitmap("img/back_tower.bmp");
 	back_tower_base = LoadBitmap("img/back_tower_base.bmp");
 	base_tex = LoadBitmap("img/base.bmp");
+	basetaj = LoadBitmap("img/taj_base.bmp");
+	floortaj = LoadBitmap("img/taj_floor.bmp");
+	towertaj = LoadBitmap("img/taj_tower.bmp");
+	taj = LoadBitmap("img/taj.bmp");
 }
 
 void gateTop() {
