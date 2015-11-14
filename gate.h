@@ -2,7 +2,17 @@
 #include<iostream>
 using namespace std;
 #include<math.h>
+#include "texture.h"
 
+GLuint basewall, smallwall, smallwall_top, border, thirdpart;
+
+void gateLoadBMP() {
+	basewall = LoadBitmap("img/basewall.bmp");
+	smallwall = LoadBitmap("img/smallwall.bmp");
+	smallwall_top = LoadBitmap("img/smallwall_top.bmp");
+	border = LoadBitmap("img/border.bmp");
+	thirdpart = LoadBitmap("img/thirdpart.bmp");
+}
 
 void gateTop() {
 	//glScalef(3, 2, 1);
@@ -727,62 +737,102 @@ void thirdPart(double front) {
 	double y = 0;
 	if (front == -1) y = 20;
 	// third part
-	glColor3f(1, 0, 0);
-	glBegin(GL_QUADS); {
-		glVertex3f(21, y + 0, 18);
-		glVertex3f(21, y + 0, 1.3);
-		glVertex3f(28, y + 0, 1.3);
-		glVertex3f(28, y + 0, 18);
+	glColor3f(1, 0.2, 0.2);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, thirdpart);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(21, y + 0, 18);
+			glTexCoord2f(1, 0); glVertex3f(28, y + 0, 18);
+			glTexCoord2f(1, 1); glVertex3f(28, y + 0, 1.3);
+			glTexCoord2f(0, 1); glVertex3f(21, y + 0, 1.3);
+		}
+		glEnd();
 	}
-	glEnd();
-	glColor3f(0, 0, 1);
-	glBegin(GL_QUADS); {
-		glVertex3f(21, y + 0, 0);
-		glVertex3f(21, y + 0, 1.3);
-		glVertex3f(28, y + 0, 1.3);
-		glVertex3f(28, y + 0, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, thirdpart);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(21, y + 0, 0);
+			glTexCoord2f(1, 0); glVertex3f(28, y + 0, 0);
+			glTexCoord2f(1, 1); glVertex3f(28, y + 0, 1.3);
+			glTexCoord2f(0, 1); glVertex3f(21, y + 0, 1.3);
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 	// third part border
-	glColor3f(1, 1, 0);
+	glColor3f(1, 1, 1);
 	
 	if (front == 1) {
-		glBegin(GL_QUADS); {
-			glVertex3f(21.3, y - .2, 16);
-			glVertex3f(21.3, y - .2, 1.3);
-			glVertex3f(21.8, y - .2, 1.3);
-			glVertex3f(21.8, y - .2, 16);
+		glEnable(GL_TEXTURE_2D); {
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON); {
+				glTexCoord2f(0, 0); glVertex3f(21.3, y - .2, 16);
+				glTexCoord2f(1, 0); glVertex3f(21.3, y - .2, 1.3); 
+				glTexCoord2f(1, 1); glVertex3f(21.8, y - .2, 1.3);
+				glTexCoord2f(0, 1); glVertex3f(21.8, y - .2, 16);
+			}
+			glEnd();
 		}
-		glEnd();
-		glBegin(GL_QUADS); { // right
-			glVertex3f(27.5, y - .2, 16);
-			glVertex3f(27.5, y - .2, 1.3);
-			glVertex3f(28.1, y - .2, 1.3);
-			glVertex3f(28.1, y - .2, 16);
+		glDisable(GL_TEXTURE_2D);
+		
+		glEnable(GL_TEXTURE_2D); {
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON); {
+				glTexCoord2f(0, 0); glVertex3f(27.5, y - .2, 16);
+				glTexCoord2f(1, 0); glVertex3f(27.5, y - .2, 1.3);
+				glTexCoord2f(1, 1); glVertex3f(28.1, y - .2, 1.3);
+				glTexCoord2f(0, 1); glVertex3f(28.1, y - .2, 16); 
+			}
+			glEnd();
 		}
-		glEnd();
-		glBegin(GL_QUADS); {
-			glVertex3f(21.8, y - .2, 16);
-			glVertex3f(21.8, y - .2, 15.5);
-			glVertex3f(27.5, y - .2, 15.5);
-			glVertex3f(27.5, y - .2, 16);
+		glDisable(GL_TEXTURE_2D);
+
+		glEnable(GL_TEXTURE_2D); {
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON); {
+				glTexCoord2f(0, 0); glVertex3f(21.8, y - .2, 16);
+				glTexCoord2f(1, 0); glVertex3f(27.5, y - .2, 16);
+				glTexCoord2f(1, 1); glVertex3f(27.5, y - .2, 15.5);
+				glTexCoord2f(0, 1); glVertex3f(21.8, y - .2, 15.5);
+			}
+			glEnd();
 		}
-		glEnd();
-		glBegin(GL_QUADS); {
-			glVertex3f(21.8, y - .2, 1.8);
-			glVertex3f(21.8, y - .2, 1.3);
-			glVertex3f(27.5, y - .2, 1.3);
-			glVertex3f(27.5, y - .2, 1.8);
+		glDisable(GL_TEXTURE_2D);
+
+		glEnable(GL_TEXTURE_2D); {
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON); {
+				glTexCoord2f(0, 0); glVertex3f(21.8, y - .2, 1.8);
+				glTexCoord2f(1, 0); glVertex3f(27.5, y - .2, 1.8);
+				glTexCoord2f(1, 1); glVertex3f(27.5, y - .2, 1.3);
+				glTexCoord2f(0, 1); glVertex3f(21.8, y - .2, 1.3);
+			}
+			glEnd();
 		}
-		glEnd();
-		// bottom rectangle
-		glBegin(GL_QUADS); {
-			glVertex3f(21.8, y - .2, 0.8);
-			glVertex3f(21.8, y - .2, 0);
-			glVertex3f(27.5, y - .2, 0);
-			glVertex3f(27.5, y - .2, 0.8);
+		glDisable(GL_TEXTURE_2D);
+
+		glEnable(GL_TEXTURE_2D); {
+			glBindTexture(GL_TEXTURE_2D, border);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON); {
+				glTexCoord2f(0, 0); glVertex3f(21.8, y - .2, 0.8);
+				glTexCoord2f(1, 0); glVertex3f(27.5, y - .2, 0.8);
+				glTexCoord2f(1, 1); glVertex3f(27.5, y - .2, 0);
+				glTexCoord2f(0, 1); glVertex3f(21.8, y - .2, 0);
+			}
+			glEnd();
 		}
-		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		
 	}
 	else {
 		glBegin(GL_QUADS); { // left
@@ -1401,63 +1451,103 @@ void roof() {
 
 void smallWall(int i) {
 	double x = 28 + 5*i;
-	glColor3f(1, 0, 0);
-	glBegin(GL_QUADS); {	//front
-		glVertex3f(x, 0, 0);
-		glVertex3f(x, 0, 5);
-		glVertex3f(x+5, 0, 5);
-		glVertex3f(x+5, 0, 0);
-	}
-	glEnd();
-	
-	glBegin(GL_QUADS); {	//back
-		glVertex3f(x, 5, 0);
-		glVertex3f(x, 5, 5);
-		glVertex3f(x + 5, 5, 5);
-		glVertex3f(x + 5, 5, 0);
-	}
-	glEnd();
-	glBegin(GL_QUADS); {	//top
-		glVertex3f(x, 0, 5);
-		glVertex3f(x, 5, 5);
-		glVertex3f(x + 5, 5, 5);
-		glVertex3f(x + 5, 0, 5);
-	}
-	glEnd(); 
-	if (i == 0) {
-		glBegin(GL_QUADS); {
-			glVertex3f(x, 0, 6);
-			glVertex3f(x, 0, 5);
-			glVertex3f(x, 5, 5);
-			glVertex3f(x, 5, 6);
+	glColor3f(1, 1, 1);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(x, 0, 0);
+			glTexCoord2f(1, 0); glVertex3f(x + 5, 0, 0);
+			glTexCoord2f(1, 1); glVertex3f(x + 5, 0, 5);
+			glTexCoord2f(0, 1); glVertex3f(x, 0, 5);
 		}
 		glEnd();
+	}
+	glDisable(GL_TEXTURE_2D);
+	
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(x, 5, 0);
+			glTexCoord2f(1, 0); glVertex3f(x + 5, 5, 0);
+			glTexCoord2f(1, 1); glVertex3f(x + 5, 5, 5);
+			glTexCoord2f(0, 1); glVertex3f(x, 5, 5);
+		}
+		glEnd();
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(x, 0, 5);
+			glTexCoord2f(1, 0); glVertex3f(x + 5, 0, 5);
+			glTexCoord2f(1, 1); glVertex3f(x + 5, 5, 5);
+			glTexCoord2f(0, 1); glVertex3f(x, 5, 5);
+		}
+		glEnd();
+	}
+	glDisable(GL_TEXTURE_2D);
+ 
+	
+
+	if (i == 0) {
+		glEnable(GL_TEXTURE_2D); {
+			glBindTexture(GL_TEXTURE_2D, border);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON); {
+				glTexCoord2f(0, 0); glVertex3f(x, 0, 6);
+				glTexCoord2f(1, 0); glVertex3f(x, 5, 6);
+				glTexCoord2f(1, 1); glVertex3f(x, 5, 5);
+				glTexCoord2f(0, 1); glVertex3f(x, 0, 5);
+			}
+			glEnd();
+		}
+		glDisable(GL_TEXTURE_2D);
 	}
 	else if (i == 5) {
-		glBegin(GL_QUADS); {
-			glVertex3f(x+5, 0, 6);
-			glVertex3f(x+5, 0, 5);
-			glVertex3f(x+5, 5, 5);
-			glVertex3f(x+5, 5, 6);
+		glEnable(GL_TEXTURE_2D); {
+			glBindTexture(GL_TEXTURE_2D, border);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON); {
+				glTexCoord2f(0, 0); glVertex3f(x+5, 0, 6);
+				glTexCoord2f(1, 0); glVertex3f(x+5, 5, 6);
+				glTexCoord2f(1, 1); glVertex3f(x+5, 5, 5);
+				glTexCoord2f(0, 1); glVertex3f(x+5, 0, 5);
+			}
+			glEnd();
+		}
+		glDisable(GL_TEXTURE_2D);
+
+	}
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(x, 0, 6);
+			glTexCoord2f(1, 0); glVertex3f(x + 5, 0, 6);
+			glTexCoord2f(1, 1); glVertex3f(x + 5, 0, 5);
+			glTexCoord2f(0, 1); glVertex3f(x, 0, 5);
 		}
 		glEnd();
 	}
-	
-	glColor3f(0, 0, 1);
-	glBegin(GL_QUADS); {	//front
-		glVertex3f(x, 0, 6);
-		glVertex3f(x, 0, 5);
-		glVertex3f(x + 5, 0, 5);
-		glVertex3f(x + 5, 0, 6);
+	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(x, 5, 6);
+			glTexCoord2f(1, 0); glVertex3f(x + 5, 5, 6);
+			glTexCoord2f(1, 1); glVertex3f(x + 5, 5, 5);
+			glTexCoord2f(0, 1); glVertex3f(x, 5, 5);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); {	//back
-		glVertex3f(x, 5, 6);
-		glVertex3f(x, 5, 5);
-		glVertex3f(x + 5, 5, 5);
-		glVertex3f(x + 5, 5, 6);
-	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 }
 
 void watchTower() {
@@ -1722,40 +1812,56 @@ void watchTower() {
 
 void baseWall(int i) {
 	double x = 5.7 * i;
-	glColor3f(0.7, 0, 1);
-	glBegin(GL_QUADS); {	//front
-		glVertex3f(x, 0, 0);
-		glVertex3f(x, 0, 10);
-		glVertex3f(x + 5.7, 0, 10);
-		glVertex3f(x + 5.7, 0, 0);
+	glColor3f(1, 1, 1);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, basewall);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(x, 0, 0);
+			glTexCoord2f(1, 0); glVertex3f(x + 5.7, 0, 0);
+			glTexCoord2f(1, 1); glVertex3f(x + 5.7, 0, 10);
+			glTexCoord2f(0, 1); glVertex3f(x, 0, 10); 
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	
+	
+	
 	glPushMatrix(); {
-		glScalef(0.7, 0.7, 1);
-		glTranslatef(95, 0, 0);
-		GLUquadric *quad = gluNewQuadric();
-		gluCylinder(quad, 15, 15, 10, 8, 50);
+		glEnable(GL_TEXTURE_2D); {
+			glScalef(0.7, 0.7, 1);
+			glTranslatef(95, 0, 0);
+			GLUquadric *quad = gluNewQuadric();
+			glBindTexture(GL_TEXTURE_2D, basewall); // here texid corresponds a bitmap image.
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+			gluCylinder(quad, 15, 15, 10, 8, 50);
+
+		}
+		glDisable(GL_TEXTURE_2D);
+		
 	}
 	glPopMatrix();
 }
 
 void baseWallRight(int i) {
 	double y = 5.7 * i;
-	glColor3f(0.7, 0, 1);
-	glBegin(GL_QUADS); {	//front
-		glVertex3f(70, y, 0);
-		glVertex3f(70, y, 10);
-		glVertex3f(70, y + 5.7, 10);
-		glVertex3f(70, y + 5.7, 0);
+	glColor3f(1, 1, 1);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, basewall);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(70, y, 0);
+			glTexCoord2f(1, 0); glVertex3f(70, y + 5.7, 0);
+			glTexCoord2f(1, 1); glVertex3f(70, y + 5.7, 10);
+			glTexCoord2f(0, 1); glVertex3f(70, y, 10);
+		}
+		glEnd();
 	}
-	glEnd();
-	glPushMatrix(); {
-		glScalef(0.7, 0.7, 1);
-		glTranslatef(95, 0, 0);
-		GLUquadric *quad = gluNewQuadric();
-		gluCylinder(quad, 15, 15, 10, 8, 50);
-	}
-	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+
+
 }
 
 void base() {

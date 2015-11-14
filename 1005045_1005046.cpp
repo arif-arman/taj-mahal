@@ -15,9 +15,6 @@ double cameraHeight;
 
 
 
-
-
-
 void display(){
 
 	//clear the display
@@ -126,7 +123,7 @@ void init(){
 	cameraRadius = 40;
 	cameraHeight = 15;
 
-
+	gateLoadBMP();
 
 	//clear the screen
 	glClearColor(0, 0, 0, 0);
