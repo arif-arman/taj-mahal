@@ -5,32 +5,32 @@
 #include<windows.h>
 #include<GL/glut.h>
 #include "gate.h"
+#include "taj.h"
 using namespace std;
-
-
-//make a global variable -- for tracking the anglular position of camera
-double cameraAngle;
-double cameraRadius;
-double cameraHeight;
-
-
 
 void display(){
 
 	//clear the display
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 0);	//color black
+	glClearColor(BLACK, 0);	//color black
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	/********************
-	/ set-up camera here
-	********************/
-	//load the correct matrix -- MODEL-VIEW matrix
 	glMatrixMode(GL_MODELVIEW);
 
-	//initialize the matrix
 	glLoadIdentity();
 
+	gluLookAt(camX, camY, camZ, lookX, lookY, lookZ, upX - camX, upY - camY, upZ - camZ);
+
+	glMatrixMode(GL_MODELVIEW);
+
+	//some gridlines along the field
+	
+	glPushMatrix();
+	glTranslatef(0, 0, 4);
+	makeTaj();
+	//baseTaj();
+	glPopMatrix();
+	
 	//now give three info
 	//1. where is the camera (viewer)?
 	//2. where is the camera is looking?
@@ -39,19 +39,18 @@ void display(){
 	//instead of CONSTANT information, we will define a circular path.
 	//	gluLookAt(-30,-30,50,	0,0,0,	0,0,1);
 
-	gluLookAt(cameraRadius * cos(cameraAngle), cameraRadius * sin(cameraAngle), cameraHeight, 0, 0, 0, 0, 0, 1);
+	
 	//NOTE: the camera still CONSTANTLY looks at the center
 
 
 	//again select MODEL-VIEW
-	glMatrixMode(GL_MODELVIEW);
 
 
 	/****************************
 	/ Add your objects from here
 	****************************/
 	//add objects
-	drawGate();
+	//drawGate();
 	
 	
 
@@ -108,7 +107,7 @@ void display(){
 
 void animate(){
 	//codes for any changes in Camera
-
+	rectAngle -= 1;
 	//cameraAngle += 0.002;	// camera will rotate at 0.002 radians per frame.
 
 	//codes for any changes in Models
@@ -120,8 +119,12 @@ void animate(){
 void init(){
 	//codes for initialization
 	cameraAngle = 0;	//// init the cameraAngle
-	cameraRadius = 40;
-	cameraHeight = 15;
+	cameraAngleDelta = 0.002;
+	rectAngle = 0;
+	canDrawGrid = true;
+	cameraHeight = 150;
+	cameraRadius = 150;
+	chandelierAngle = 0;
 
 	gateLoadBMP();
 
@@ -145,35 +148,163 @@ void init(){
 	//far distance
 }
 
-void specialKeyListener(int key, int x, int y){
-	switch (key){
-	case GLUT_KEY_DOWN:		//down arrow key
-		cameraRadius += 10;
-		break;
-	case GLUT_KEY_UP:		// up arrow key
-		if (cameraRadius > 10)
-			cameraRadius -= 10;
-		break;
-
-	case GLUT_KEY_RIGHT:
-		cameraAngle += 0.4;
-		break;
-	case GLUT_KEY_LEFT:
-		cameraAngle -= 0.4;
-		break;
-	case GLUT_KEY_PAGE_UP:
-		cameraHeight += 10;
-		break;
-	case GLUT_KEY_PAGE_DOWN:
-		cameraHeight -= 10;
-		break;
-	default:
-		break;
-	}
-}
 
 void keyboardListener(unsigned char key, int x, int y){
 	switch (key){
+		double a, b, c, d, x1, y1, z1, si, co;
+
+	case '1': // look left
+		d = sqrt((upX - camX)*(upX - camX) + (upY - camY)*(upY - camY) + (upZ - camZ)*(upZ - camZ));
+		a = (upX - camX) / d;
+		b = (upY - camY) / d;
+		c = (upZ - camZ) / d;
+		si = sin(lookA);
+		co = cos(lookA);
+		x1 = (a*a*(1 - co) + co)*(lookX - camX) + (b*a*(1 - co) - c*si)*(lookY - camY) + (a*c*(1 - co) + b*si)*(lookZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lookX - camX) + (b*b*(1 - co) + co)*(lookY - camY) + (b*c*(1 - co) - a*si)*(lookZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lookX - camX) + (b*c*(1 - co) + a*si)*(lookY - camY) + (c*c*(1 - co) + co)*(lookZ - camZ);
+		lookX = x1 + camX;
+		lookY = y1 + camY;
+		lookZ = z1 + camZ;
+
+		x1 = (a*a*(1 - co) + co)*(lrX - camX) + (b*a*(1 - co) - c*si)*(lrY - camY) + (a*c*(1 - co) + b*si)*(lrZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lrX - camX) + (b*b*(1 - co) + co)*(lrY - camY) + (b*c*(1 - co) - a*si)*(lrZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lrX - camX) + (b*c*(1 - co) + a*si)*(lrY - camY) + (c*c*(1 - co) + co)*(lrZ - camZ);
+		lrX = x1 + camX;
+		lrY = y1 + camY;
+		lrZ = z1 + camZ;
+
+		break;
+
+	case '2': // look right
+		d = sqrt((upX - camX)*(upX - camX) + (upY - camY)*(upY - camY) + (upZ - camZ)*(upZ - camZ));
+		a = (upX - camX) / d;
+		b = (upY - camY) / d;
+		c = (upZ - camZ) / d;
+		si = sin(-lookA);
+		co = cos(-lookA);
+		x1 = (a*a*(1 - co) + co)*(lookX - camX) + (b*a*(1 - co) - c*si)*(lookY - camY) + (a*c*(1 - co) + b*si)*(lookZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lookX - camX) + (b*b*(1 - co) + co)*(lookY - camY) + (b*c*(1 - co) - a*si)*(lookZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lookX - camX) + (b*c*(1 - co) + a*si)*(lookY - camY) + (c*c*(1 - co) + co)*(lookZ - camZ);
+		lookX = x1 + camX;
+		lookY = y1 + camY;
+		lookZ = z1 + camZ;
+
+		x1 = (a*a*(1 - co) + co)*(lrX - camX) + (b*a*(1 - co) - c*si)*(lrY - camY) + (a*c*(1 - co) + b*si)*(lrZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lrX - camX) + (b*b*(1 - co) + co)*(lrY - camY) + (b*c*(1 - co) - a*si)*(lrZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lrX - camX) + (b*c*(1 - co) + a*si)*(lrY - camY) + (c*c*(1 - co) + co)*(lrZ - camZ);
+		lrX = x1 + camX;
+		lrY = y1 + camY;
+		lrZ = z1 + camZ;
+
+		break;
+
+	case '3': // pitch down
+		d = sqrt((lrX - camX)*(lrX - camX) + (lrY - camY)*(lrY - camY) + (lrZ - camZ)*(lrZ - camZ));
+		a = (lrX - camX) / d;
+		b = (lrY - camY) / d;
+		c = (lrZ - camZ) / d;
+		si = sin(upA);
+		co = cos(upA);
+		x1 = (a*a*(1 - co) + co)*(lookX - camX) + (b*a*(1 - co) - c*si)*(lookY - camY) + (a*c*(1 - co) + b*si)*(lookZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lookX - camX) + (b*b*(1 - co) + co)*(lookY - camY) + (b*c*(1 - co) - a*si)*(lookZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lookX - camX) + (b*c*(1 - co) + a*si)*(lookY - camY) + (c*c*(1 - co) + co)*(lookZ - camZ);
+		lookX = x1 + camX;
+		lookY = y1 + camY;
+		lookZ = z1 + camZ;
+
+		x1 = (a*a*(1 - co) + co)*(upX - camX) + (b*a*(1 - co) - c*si)*(upY - camY) + (a*c*(1 - co) + b*si)*(upZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(upX - camX) + (b*b*(1 - co) + co)*(upY - camY) + (b*c*(1 - co) - a*si)*(upZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(upX - camX) + (b*c*(1 - co) + a*si)*(upY - camY) + (c*c*(1 - co) + co)*(upZ - camZ);
+		upX = x1 + camX;
+		upY = y1 + camY;
+		upZ = z1 + camZ;
+
+		break;
+
+	case '4': // pitch up
+		d = sqrt((lrX - camX)*(lrX - camX) + (lrY - camY)*(lrY - camY) + (lrZ - camZ)*(lrZ - camZ));
+		a = (lrX - camX) / d;
+		b = (lrY - camY) / d;
+		c = (lrZ - camZ) / d;
+		si = sin(-upA);
+		co = cos(-upA);
+		x1 = (a*a*(1 - co) + co)*(lookX - camX) + (b*a*(1 - co) - c*si)*(lookY - camY) + (a*c*(1 - co) + b*si)*(lookZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lookX - camX) + (b*b*(1 - co) + co)*(lookY - camY) + (b*c*(1 - co) - a*si)*(lookZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lookX - camX) + (b*c*(1 - co) + a*si)*(lookY - camY) + (c*c*(1 - co) + co)*(lookZ - camZ);
+		lookX = x1 + camX;
+		lookY = y1 + camY;
+		lookZ = z1 + camZ;
+
+		x1 = (a*a*(1 - co) + co)*(upX - camX) + (b*a*(1 - co) - c*si)*(upY - camY) + (a*c*(1 - co) + b*si)*(upZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(upX - camX) + (b*b*(1 - co) + co)*(upY - camY) + (b*c*(1 - co) - a*si)*(upZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(upX - camX) + (b*c*(1 - co) + a*si)*(upY - camY) + (c*c*(1 - co) + co)*(upZ - camZ);
+		upX = x1 + camX;
+		upY = y1 + camY;
+		upZ = z1 + camZ;
+
+		break;
+
+
+	case '6':   //roll left
+		d = sqrt((lookX - camX)*(lookX - camX) + (lookY - camY)*(lookY - camY) + (lookZ - camZ)*(lookZ - camZ));
+		a = (lookX - camX) / d;
+		b = (lookY - camY) / d;
+		c = (lookZ - camZ) / d;
+		si = sin(-lrA);
+		co = cos(-lrA);
+
+		x1 = (a*a*(1 - co) + co)*(lrX - camX) + (b*a*(1 - co) - c*si)*(lrY - camY) + (a*c*(1 - co) + b*si)*(lrZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lrX - camX) + (b*b*(1 - co) + co)*(lrY - camY) + (b*c*(1 - co) - a*si)*(lrZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lrX - camX) + (b*c*(1 - co) + a*si)*(lrY - camY) + (c*c*(1 - co) + co)*(lrZ - camZ);
+		lrX = x1 + camX;
+		lrY = y1 + camY;
+		lrZ = z1 + camZ;
+
+		x1 = (a*a*(1 - co) + co)*(upX - camX) + (b*a*(1 - co) - c*si)*(upY - camY) + (a*c*(1 - co) + b*si)*(upZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(upX - camX) + (b*b*(1 - co) + co)*(upY - camY) + (b*c*(1 - co) - a*si)*(upZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(upX - camX) + (b*c*(1 - co) + a*si)*(upY - camY) + (c*c*(1 - co) + co)*(upZ - camZ);
+		upX = x1 + camX;
+		upY = y1 + camY;
+		upZ = z1 + camZ;
+
+		break;
+
+
+	case '5':   //roll right
+		d = sqrt((lookX - camX)*(lookX - camX) + (lookY - camY)*(lookY - camY) + (lookZ - camZ)*(lookZ - camZ));
+		a = (lookX - camX) / d;
+		b = (lookY - camY) / d;
+		c = (lookZ - camZ) / d;
+		si = sin(lrA);
+		co = cos(lrA);
+
+		x1 = (a*a*(1 - co) + co)*(lrX - camX) + (b*a*(1 - co) - c*si)*(lrY - camY) + (a*c*(1 - co) + b*si)*(lrZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(lrX - camX) + (b*b*(1 - co) + co)*(lrY - camY) + (b*c*(1 - co) - a*si)*(lrZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(lrX - camX) + (b*c*(1 - co) + a*si)*(lrY - camY) + (c*c*(1 - co) + co)*(lrZ - camZ);
+		lrX = x1 + camX;
+		lrY = y1 + camY;
+		lrZ = z1 + camZ;
+
+		x1 = (a*a*(1 - co) + co)*(upX - camX) + (b*a*(1 - co) - c*si)*(upY - camY) + (a*c*(1 - co) + b*si)*(upZ - camZ);
+		y1 = (b*a*(1 - co) + c*si)*(upX - camX) + (b*b*(1 - co) + co)*(upY - camY) + (b*c*(1 - co) - a*si)*(upZ - camZ);
+		z1 = (c*a*(1 - co) - b*si)*(upX - camX) + (b*c*(1 - co) + a*si)*(upY - camY) + (c*c*(1 - co) + co)*(upZ - camZ);
+		upX = x1 + camX;
+		upY = y1 + camY;
+		upZ = z1 + camZ;
+
+		break;
+
+	case '7':   //reset camera
+		camX = 0, camY = 0, camZ = 0;
+		lookX = 100, lookY = 0, lookZ = 0;
+		upX = 0, upY = 0, upZ = 100;
+		lrX = 0, lrY = 100, lrZ = 0;
+		lookA = 0.1, upA = 0.1, lrA = 0.1;
+		lookM = 4, upM = 4, lrM = 4;
+
+		break;
+
 
 	case 27:	//ESCAPE KEY -- simply exit
 		exit(0);
@@ -184,6 +315,95 @@ void keyboardListener(unsigned char key, int x, int y){
 	}
 }
 
+void specialKeyListener(int key, int x, int y){
+	switch (key){
+		double a, b, c, d;
+	case GLUT_KEY_DOWN:		//backward
+		d = sqrt((lookX - camX)*(lookX - camX) + (lookY - camY)*(lookY - camY) + (lookZ - camZ)*(lookZ - camZ));
+		a = (lookX - camX) / d*-lookM;
+		b = (lookY - camY) / d*-lookM;
+		c = (lookZ - camZ) / d*-lookM;
+		increase(a, b, c);
+
+		break;
+
+	case GLUT_KEY_UP:		//forward
+		d = sqrt((lookX - camX)*(lookX - camX) + (lookY - camY)*(lookY - camY) + (lookZ - camZ)*(lookZ - camZ));
+		a = (lookX - camX) / d*lookM;
+		b = (lookY - camY) / d*lookM;
+		c = (lookZ - camZ) / d*lookM;
+		increase(a, b, c);
+
+		break;
+
+
+
+	case GLUT_KEY_RIGHT: //strafe right
+		d = sqrt((lrX - camX)*(lrX - camX) + (lrY - camY)*(lrY - camY) + (lrZ - camZ)*(lrZ - camZ));
+		a = (lrX - camX) / d*-lrM;
+		b = (lrY - camY) / d*-lrM;
+		c = (lrZ - camZ) / d*-lrM;
+		increase(a, b, c);
+		break;
+
+	case GLUT_KEY_LEFT: //strafe left
+		d = sqrt((lrX - camX)*(lrX - camX) + (lrY - camY)*(lrY - camY) + (lrZ - camZ)*(lrZ - camZ));
+		a = (lrX - camX) / d*lrM;
+		b = (lrY - camY) / d*lrM;
+		c = (lrZ - camZ) / d*lrM;
+		increase(a, b, c);
+		break;
+
+
+
+	case GLUT_KEY_PAGE_UP: //fly up
+		d = sqrt((upX - camX)*(upX - camX) + (upY - camY)*(upY - camY) + (upZ - camZ)*(upZ - camZ));
+		a = (upX - camX) / d*upM;
+		b = (upY - camY) / d*upM;
+		c = (upZ - camZ) / d*upM;
+		increase(a, b, c);
+		break;
+	case GLUT_KEY_PAGE_DOWN: //fly down
+		d = sqrt((upX - camX)*(upX - camX) + (upY - camY)*(upY - camY) + (upZ - camZ)*(upZ - camZ));
+		a = (upX - camX) / d*-upM;
+		b = (upY - camY) / d*-upM;
+		c = (upZ - camZ) / d*-upM;
+		increase(a, b, c);
+		break;
+
+	case GLUT_KEY_INSERT:
+		break;
+
+	case GLUT_KEY_HOME:
+		break;
+	case GLUT_KEY_END:
+		break;
+
+	default:
+		break;
+	}
+}
+
+void mouseListener(int button, int state, int x, int y){	//x, y is the x-y of the screen (2D)
+	switch (button){
+	case GLUT_LEFT_BUTTON:
+		if (state == GLUT_DOWN){		// 2 times?? in ONE click? -- solution is checking DOWN or UP
+			cameraAngleDelta = -cameraAngleDelta;
+		}
+		break;
+
+	case GLUT_RIGHT_BUTTON:
+		//........
+		break;
+
+	case GLUT_MIDDLE_BUTTON:
+		//........
+		break;
+
+	default:
+		break;
+	}
+}
 int main(int argc, char **argv){
 	glutInit(&argc, argv);
 	glutInitWindowSize(700, 700);

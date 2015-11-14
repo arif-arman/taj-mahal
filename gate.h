@@ -4,7 +4,7 @@ using namespace std;
 #include<math.h>
 #include "texture.h"
 
-GLuint basewall, smallwall, smallwall_top, border, thirdpart, chamber, chamber_side, white_jinish, white_rect;
+GLuint basewall, smallwall, smallwall_top, border, thirdpart, chamber, chamber_side, white_jinish, white_rect, dome_tex, back_tower, back_tower_base, base_tex;
 
 void gateLoadBMP() {
 	basewall = LoadBitmap("img/basewall.bmp");
@@ -16,6 +16,10 @@ void gateLoadBMP() {
 	chamber_side = LoadBitmap("img/chamber_side.bmp");
 	white_jinish = LoadBitmap("img/white_jinish.bmp");
 	white_rect = LoadBitmap("img/white_rect.bmp");
+	dome_tex = LoadBitmap("img/dome.bmp");
+	back_tower = LoadBitmap("img/back_tower.bmp");
+	back_tower_base = LoadBitmap("img/back_tower_base.bmp");
+	base_tex = LoadBitmap("img/base.bmp");
 }
 
 void gateTop() {
@@ -94,15 +98,29 @@ void gateTopSym() {
 	glPopMatrix();
 }
 
+// done
 void domeTop() {
 	GLUquadric *quad = gluNewQuadric();
 	// base
 	glColor3f(0.3, 0.3, 0.3);
-	gluCylinder(quad, 6, 2, 3, 20, 20);
+	glEnable(GL_TEXTURE_2D);
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix(); {
+		glScalef(40, 1, 1); // This scaling controls the number of texture repetitions 
+		glBindTexture(GL_TEXTURE_2D, white_rect);
+		gluQuadricNormals(quad, GLU_SMOOTH);
+		gluQuadricTexture(quad, GLU_TRUE);
+
+		glMatrixMode(GL_MODELVIEW);
+		gluCylinder(quad, 6, 2, 3, 20, 20);
+		glMatrixMode(GL_TEXTURE);
+	} glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	glMatrixMode(GL_MODELVIEW);
+	glColor3f(1, 1, 0);
 	// first cylinder
 	glPushMatrix(); {
 		glTranslatef(0, 0, 3);
-		glColor3f(1, 1, 0);
 		gluCylinder(quad, 2, 1, 1, 20, 20);
 	}
 	glPopMatrix();
@@ -175,36 +193,91 @@ void domeTop() {
 
 }
 
+// done
 void dome(bool main) {
+	glColor3f(1, 1, 1);
 	GLUquadric *quad = gluNewQuadric();
 	if (main) {
 		// base
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(40, 1, 1); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, thirdpart);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
 
-		gluCylinder(quad, 6, 6, 3, 200, 200);
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 6, 6, 3, 200, 200);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 		// second base
 		glPushMatrix(); {
 			glTranslatef(0, 0, 3);
-			glColor3f(0, 1, 0);
-			gluCylinder(quad, 6, 6, 2, 200, 200);
+			glEnable(GL_TEXTURE_2D);
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix(); {
+				glScalef(40, 1, 1); // This scaling controls the number of texture repetitions 
+				glBindTexture(GL_TEXTURE_2D, dome_tex);
+				gluQuadricNormals(quad, GLU_SMOOTH);
+				gluQuadricTexture(quad, GLU_TRUE);
+
+				glMatrixMode(GL_MODELVIEW);
+				gluCylinder(quad, 6, 6, 2, 200, 200);
+				glMatrixMode(GL_TEXTURE);
+			} glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+			glMatrixMode(GL_MODELVIEW);
+			
 		}
 		glPopMatrix();
 		// third base angular white
 		glPushMatrix(); {
 			glTranslatef(0, 0, 5);
-			glColor3f(1, 1, 1);
-			gluCylinder(quad, 6, 6.8, 1.5, 200, 200);
+			glEnable(GL_TEXTURE_2D);
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix(); {
+				glScalef(40, 1, 1); // This scaling controls the number of texture repetitions 
+				glBindTexture(GL_TEXTURE_2D, white_rect);
+				gluQuadricNormals(quad, GLU_SMOOTH);
+				gluQuadricTexture(quad, GLU_TRUE);
+
+				glMatrixMode(GL_MODELVIEW);
+				gluCylinder(quad, 6, 6.8, 1.5, 200, 200);
+				glMatrixMode(GL_TEXTURE);
+			} glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+			glMatrixMode(GL_MODELVIEW);
+			
 		}
 		glPopMatrix();
 
 	}
 	// fourth base, angular gray
 	glPushMatrix(); {
+		glColor3f(0.7, 0.7, 0.7);
 		glTranslatef(0, 0, 6.5);
-		glColor3f(0, 1, 0);
-		gluCylinder(quad, 6.8, 7, .5, 200, 200);
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(40, 1, 1); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, white_rect);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 6.8, 7, .5, 200, 200);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 	}
 	glPopMatrix();
-	glColor3f(1, 0, 0);
+	glColor3f(1, 1, 1);
 	glPushMatrix(); {
 		glTranslatef(0, 0, 7);
 		glScalef(1, 1, 1.2);
@@ -217,8 +290,21 @@ void dome(bool main) {
 				equ1[0] = 0; equ1[1] = 0; equ1[2] = -1; equ1[3] = 6.5;
 				glClipPlane(GL_CLIP_PLANE1, equ1);
 				glEnable(GL_CLIP_PLANE1); {
-					glColor3f(1, 1, 1);
-					gluSphere(quad, 7, 200, 200);
+					glEnable(GL_TEXTURE_2D);
+					glMatrixMode(GL_TEXTURE);
+					glPushMatrix(); {
+						glScalef(40, 40, 20); // This scaling controls the number of texture repetitions 
+						glBindTexture(GL_TEXTURE_2D, white_rect);
+						gluQuadricNormals(quad, GLU_SMOOTH);
+						gluQuadricTexture(quad, GLU_TRUE);
+
+						glMatrixMode(GL_MODELVIEW);
+						gluSphere(quad, 7, 200, 200);
+						glMatrixMode(GL_TEXTURE);
+					} glPopMatrix();
+					glDisable(GL_TEXTURE_2D);
+					glMatrixMode(GL_MODELVIEW);
+					
 				}
 				glDisable(GL_CLIP_PLANE1);
 
@@ -239,6 +325,7 @@ void dome(bool main) {
 
 }
 
+// done
 void firstPart(double front) {
 	glColor3f(1, 1, 1);
 	double y = 0;
@@ -481,15 +568,28 @@ void firstPart(double front) {
 
 	// first cylinder
 	glPushMatrix(); {
-		glColor3f(1, 0, 0);
+
 		glTranslatef(10.8, y + 0, 0);
 		GLUquadric *quad;
 		quad = gluNewQuadric();
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, smallwall_top); // here texid corresponds a bitmap image.
+		gluQuadricNormals(quad, GLU_SMOOTH);
+		gluQuadricTexture(quad, GLU_TRUE);
 		gluCylinder(quad, .3, .3, 27, 20, 20);
+		glDisable(GL_TEXTURE_2D);
+		
 		glPushMatrix(); {
-			glColor3f(0, 0, 0);
+
 			glTranslatef(0, 0, 27);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, border); // here texid corresponds a bitmap image.
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
 			gluCylinder(quad, .4, .5, 1, 20, 20);
+			glDisable(GL_TEXTURE_2D);
+
+			
 			glPushMatrix(); {
 				glTranslatef(0, 0, 1);
 				glScalef(.05, .05, .05);
@@ -501,10 +601,13 @@ void firstPart(double front) {
 		glPushMatrix(); {
 			for (int i = 0; i < 4; i++) {
 				glTranslatef(0, 0, 5);
-
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, border); // here texid corresponds a bitmap image.
+				gluQuadricNormals(quad, GLU_SMOOTH);
+				gluQuadricTexture(quad, GLU_TRUE);
+				gluCylinder(quad, .4, .5, 1, 20, 20);
+				glDisable(GL_TEXTURE_2D);
 				
-				glColor3f(0, 0, 0);
-				gluCylinder(quad, .4, .4, 1, 20, 20);
 			
 			
 			}
@@ -515,6 +618,7 @@ void firstPart(double front) {
 	glPopMatrix();
 }
 
+// done
 void secondPart(double front) {
 	double y = 0;
 	if (front == -1) y = 20;
@@ -589,15 +693,25 @@ void secondPart(double front) {
 
 	// second cylinder
 	glPushMatrix(); {
-		glColor3f(1, 0, 0);
 		glTranslatef(21, y + 0, 0);
 		GLUquadric *quad;
 		quad = gluNewQuadric();
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, smallwall_top); // here texid corresponds a bitmap image.
+		gluQuadricNormals(quad, GLU_SMOOTH);
+		gluQuadricTexture(quad, GLU_TRUE);
 		gluCylinder(quad, .3, .3, 21, 20, 20);
+		glDisable(GL_TEXTURE_2D);
+		
 		glPushMatrix(); {
-			glColor3f(0, 0, 0);
 			glTranslatef(0, 0, 21);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, border); // here texid corresponds a bitmap image.
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
 			gluCylinder(quad, .4, .5, 1, 20, 20);
+			glDisable(GL_TEXTURE_2D);
+			
 			glPushMatrix(); {
 				glTranslatef(0, 0, 1);
 				glScalef(.05, .05, .05);
@@ -609,8 +723,13 @@ void secondPart(double front) {
 		glPushMatrix(); {
 			for (int i = 0; i < 3; i++) {
 				glTranslatef(0, 0, 5);
-				glColor3f(0, 0, 0);
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, border); // here texid corresponds a bitmap image.
+				gluQuadricNormals(quad, GLU_SMOOTH);
+				gluQuadricTexture(quad, GLU_TRUE);
 				gluCylinder(quad, .4, .4, 1, 20, 20);
+				glDisable(GL_TEXTURE_2D);
+				
 			}
 		}
 		glPopMatrix();
@@ -931,6 +1050,7 @@ void secondPart(double front) {
 
 }
 
+// done
 void thirdPart(double front) {
 	double y = 0;
 	if (front == -1) y = 20;
@@ -1184,186 +1304,323 @@ void thirdPart(double front) {
 
 }
 
+// done
 void rightSym(double x) {
 	// three symmetric parts
-	glColor3f(1, 0, 0);
-	glBegin(GL_QUADS); {
-		glVertex3f(28, 5 + x, 18);
-		glVertex3f(28, 5 + x, 7);
-		glVertex3f(28, x, 7);
-		glVertex3f(28, x, 18);
+	glColor3f(1, 1, 1);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, thirdpart);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28, 5 + x, 18);
+			glTexCoord2f(2, 0); glVertex3f(28, x, 18);
+			glTexCoord2f(2, 1); glVertex3f(28, x, 7);
+			glTexCoord2f(0, 1); glVertex3f(28, 5 + x, 7);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); {
-		glVertex3f(28, x + 0.8, 18);
-		glVertex3f(28, x + 0.8, 0);
-		glVertex3f(28, x, 0);
-		glVertex3f(28, x, 18);
+	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, thirdpart);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28, x + 0.8, 18);
+			glTexCoord2f(3, 0); glVertex3f(28, x, 18);
+			glTexCoord2f(3, 1); glVertex3f(28, x, 0);
+			glTexCoord2f(0, 1); glVertex3f(28, x + 0.8, 0);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); {
-		glVertex3f(28, x + 5 - 0.8, 18);
-		glVertex3f(28, x + 5 -0.8, 0);
-		glVertex3f(28, x + 5, 0);
-		glVertex3f(28, x + 5, 18);
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, thirdpart);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28, x + 5 - 0.8, 18);
+			glTexCoord2f(3, 0); glVertex3f(28, x + 5, 18);
+			glTexCoord2f(3, 1); glVertex3f(28, x + 5, 0);
+			glTexCoord2f(0, 1); glVertex3f(28, x + 5 - 0.8, 0);
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
+
 	// segment border
-	glColor3f(1, 1, 0);
-	glBegin(GL_QUADS); { // left
-		glVertex3f(28.1, x, 16);
-		glVertex3f(28.1, x, 1.5);
-		glVertex3f(28, x + .5, 1.5);
-		glVertex3f(28, x + .5, 16);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x, 16);
+			glTexCoord2f(3, 0); glVertex3f(28.1, x, 1.5);
+			glTexCoord2f(3, 1); glVertex3f(28, x + .5, 1.5);
+			glTexCoord2f(0, 1); glVertex3f(28, x + .5, 16);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // right
-		glVertex3f(28.1, x + 5, 16);
-		glVertex3f(28.1, x + 5, 1.5);
-		glVertex3f(28, x + 5 - .5, 1.5);
-		glVertex3f(28, x + 5 - .5, 16);
+	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5, 16);
+			glTexCoord2f(3, 0); glVertex3f(28.1, x + 5, 1.5);
+			glTexCoord2f(3, 1); glVertex3f(28, x + 5 - .5, 1.5);
+			glTexCoord2f(0, 1); glVertex3f(28, x + 5 - .5, 16);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // top
-		glVertex3f(28.1, x + 5 - 0.5, 16);
-		glVertex3f(28.1, x + 5 - 0.5, 15.5);
-		glVertex3f(28, x + .5, 15.5);
-		glVertex3f(28, x + .5, 16);
+	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.5, 16);
+			glTexCoord2f(1, 0); glVertex3f(28, x + .5, 16);
+			glTexCoord2f(1, 1); glVertex3f(28, x + .5, 15.5);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.5, 15.5);
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 	// three parts of each segment
 	// bottom
-	glBegin(GL_QUADS); { // right
-		glVertex3f(28.1, x + 5 - 0.8, 7);
-		glVertex3f(28.1, x + 5 - 0.8, 1.5);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 1.5);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7);
+	// right
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8, 7);
+			glTexCoord2f(3, 0); glVertex3f(28.1, x + 5 - 0.8, 1.5); 
+			glTexCoord2f(3, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 1.5);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // leftt
-		glVertex3f(28.1, x + 0.8, 7);
-		glVertex3f(28.1, x + 0.8, 1.5);
-		glVertex3f(28.1, x + 0.8 + 0.2, 1.5);
-		glVertex3f(28.1, x + 0.8 + 0.2, 7);
+	glDisable(GL_TEXTURE_2D);
+	// leftt
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 0.8, 7);
+			glTexCoord2f(3, 0); glVertex3f(28.1, x + 0.8, 1.5);
+			glTexCoord2f(3, 1); glVertex3f(28.1, x + 0.8 + 0.2, 1.5);
+			glTexCoord2f(0, 1);  glVertex3f(28.1, x + 0.8 + 0.2, 7);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // top
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 6.8);
-		glVertex3f(28.1, x + 0.8 + 0.2, 6.8);
-		glVertex3f(28.1, x + 0.8 + 0.2, 7);
+	glDisable(GL_TEXTURE_2D);
+	// top
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7);
+			glTexCoord2f(1, 0); glVertex3f(28.1, x + 0.8 + 0.2, 7);
+			glTexCoord2f(1, 1); glVertex3f(28.1, x + 0.8 + 0.2, 6.8);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 6.8);
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
+
 	// bot chamber
-	glColor3f(1, 0, 0);
-	glBegin(GL_QUADS); { // left
-		glVertex3f(28.1, x + 0.8, 0);
-		glVertex3f(28.1, x + 0.8, 9);
-		glVertex3f(25.1, x + 0.8, 9);
-		glVertex3f(25.1, x + 0.8, 0);
+	// left
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, chamber_side);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 0.8, 0);
+			glTexCoord2f(1, 0); glVertex3f(25.1, x + 0.8, 0);
+			glTexCoord2f(1, 1); glVertex3f(25.1, x + 0.8, 9);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 0.8, 9);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // right
-		glVertex3f(28.1, x + 5 - 0.8, 0);
-		glVertex3f(28.1, x + 5 - 0.8, 9);
-		glVertex3f(25.1, x + 5 - 0.8, 9);
-		glVertex3f(25.1, x + 5 - 0.8, 0);
+	glDisable(GL_TEXTURE_2D);
+	// right
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, chamber_side);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8, 0);
+			glTexCoord2f(1, 0); glVertex3f(25.1, x + 5 - 0.8, 0);
+			glTexCoord2f(1, 1); glVertex3f(25.1, x + 5 - 0.8, 9);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8, 9);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // back
-		glVertex3f(25.1, x + 0.8, 0);
-		glVertex3f(25.1, x + 0.8, 9);
-		glVertex3f(25.1, x + 5 - 0.8, 9);
-		glVertex3f(25.1, x + 5 - 0.8, 0);
+	glDisable(GL_TEXTURE_2D);
+	// back
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, chamber);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(25.1, x + 0.8, 0);
+			glTexCoord2f(1, 0); glVertex3f(25.1, x + 5 - 0.8, 0);
+			glTexCoord2f(1, 2); glVertex3f(25.1, x + 5 - 0.8, 9);
+			glTexCoord2f(0, 2); glVertex3f(25.1, x + 0.8, 9);
+		}
+		glEnd();
 	}
-	glEnd();
-	glColor3f(0, 1, 0);
-	glBegin(GL_QUADS); { // base
-		glVertex3f(28.1, x + 0.8, 0);
-		glVertex3f(28.1, x + 5 -0.8, 0);
-		glVertex3f(25.1, x + 5 - 0.8, 0);
-		glVertex3f(25.1, x + 0.8, 0);
+	glDisable(GL_TEXTURE_2D);
+	// base
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, border);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 0.8, 0);
+			glTexCoord2f(1, 0);	glVertex3f(25.1, x + 0.8, 0);
+			glTexCoord2f(1, 1); glVertex3f(25.1, x + 5 - 0.8, 0);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8, 0);
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 	// chamber top
 	glPushMatrix(); {
-		glColor3f(0, 1, 0);
 		glTranslatef(27.8, x + 2.5, 4.5);
 		glScalef(0.2, 0.15, 0.15);
 		glRotatef(90, 0, 0, 1);
 		gateTopSym();
 	}
 	glPopMatrix();
+
+	glColor3f(1, 1, 1);
 	// middle
-	glColor3f(1, 1, 0);
-	glBegin(GL_QUADS); { // right
-		glVertex3f(28.1, x + 5 - 0.8, 10);
-		glVertex3f(28.1, x + 5 - 0.8, 7.5);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7.5);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10);
+	// right
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8, 10);
+			glTexCoord2f(2, 0);	glVertex3f(28.1, x + 5 - 0.8, 7.5);
+			glTexCoord2f(2, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7.5);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // leftt
-		glVertex3f(28.1, x + 0.8, 10);
-		glVertex3f(28.1, x + 0.8, 7.5);
-		glVertex3f(28.1, x + 0.8 + 0.2, 7.5);
-		glVertex3f(28.1, x + 0.8 + 0.2, 10);
+	glDisable(GL_TEXTURE_2D);
+	// left
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 0.8, 10);
+			glTexCoord2f(2, 0);	glVertex3f(28.1, x + 0.8, 7.5);
+			glTexCoord2f(2, 1); glVertex3f(28.1, x + 0.8 + 0.2, 7.5);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 0.8 + 0.2, 10);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // top
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 9.8);
-		glVertex3f(28.1, x + 0.8 + 0.2, 9.8);
-		glVertex3f(28.1, x + 0.8 + 0.2, 10);
-	}
-	glEnd();
-	glBegin(GL_QUADS); { // bot
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7.5);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7.7);
-		glVertex3f(28.1, x + 0.8 + 0.2, 7.7);
-		glVertex3f(28.1, x + 0.8 + 0.2, 7.5);
-	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
 	// top
-	glBegin(GL_QUADS); { // right
-		glVertex3f(28.1, x + 5 - 0.8, 10.5);
-		glVertex3f(28.1, x + 5 - 0.8, 15);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 15);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10.5);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10);
+			glTexCoord2f(1, 0);	glVertex3f(28.1, x + 0.8 + 0.2, 10);
+			glTexCoord2f(1, 1); glVertex3f(28.1, x + 0.8 + 0.2, 9.8);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 9.8);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // leftt
-		glVertex3f(28.1, x + 0.8, 10.5);
-		glVertex3f(28.1, x + 0.8, 15);
-		glVertex3f(28.1, x + 0.8 + 0.2, 15);
-		glVertex3f(28.1, x + 0.8 + 0.2, 10.5);
+	glDisable(GL_TEXTURE_2D);
+	// bot
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7.5);
+			glTexCoord2f(1, 0);	glVertex3f(28.1, x + 0.8 + 0.2, 7.5);
+			glTexCoord2f(1, 1); glVertex3f(28.1, x + 0.8 + 0.2, 7.7);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 7.7);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // top
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 15);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 14.6);
-		glVertex3f(28.1, x + 0.8 + 0.2, 14.6);
-		glVertex3f(28.1, x + 0.8 + 0.2, 15);
+	glDisable(GL_TEXTURE_2D);
+	
+	// top
+	// right
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8, 10.5);
+			glTexCoord2f(3, 0);	glVertex3f(28.1, x + 5 - 0.8, 15);
+			glTexCoord2f(3, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 15);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10.5);
+		}
+		glEnd();
 	}
-	glEnd();
-	glBegin(GL_QUADS); { // bot
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10.5);
-		glVertex3f(28.1, x + 5 - 0.8 - 0.2, 11);
-		glVertex3f(28.1, x + 0.8 + 0.2, 11);
-		glVertex3f(28.1, x + 0.8 + 0.2, 10.5);
+	glDisable(GL_TEXTURE_2D);
+	// leftt
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 0.8, 10.5);
+			glTexCoord2f(3, 0);	glVertex3f(28.1, x + 0.8, 15);
+			glTexCoord2f(3, 1); glVertex3f(28.1, x + 0.8 + 0.2, 15);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 0.8 + 0.2, 10.5);
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	// top
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 15);
+			glTexCoord2f(1, 0);	glVertex3f(28.1, x + 0.8 + 0.2, 15);
+			glTexCoord2f(1, 1); glVertex3f(28.1, x + 0.8 + 0.2, 14.6);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 14.6);
+		}
+		glEnd();
+	}
+	glDisable(GL_TEXTURE_2D);
+	// bot
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, smallwall_top);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 10.5);
+			glTexCoord2f(1, 0);	glVertex3f(28.1, x + 0.8 + 0.2, 10.5);
+			glTexCoord2f(1, 1); glVertex3f(28.1, x + 0.8 + 0.2, 11);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 5 - 0.8 - 0.2, 11);
+		}
+		glEnd();
+	}
+	glDisable(GL_TEXTURE_2D);
+
 	// upper white jinish
 	glColor3f(1, 1, 1);
-	glBegin(GL_QUADS); {
-		glVertex3f(28.1, x + 1.7, 11);
-		glVertex3f(28.1, x + 1.7, 14);
-		glVertex3f(28.1, x + 3.3, 14);
-		glVertex3f(28.1, x + 3.3, 11);
+	glEnable(GL_TEXTURE_2D); {
+		glBindTexture(GL_TEXTURE_2D, white_jinish);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON); {
+			glTexCoord2f(0, 0); glVertex3f(28.1, x + 1.7, 11);
+			glTexCoord2f(1, 0);	glVertex3f(28.1, x + 3.3, 11);
+			glTexCoord2f(1, 1); glVertex3f(28.1, x + 3.3, 14);
+			glTexCoord2f(0, 1); glVertex3f(28.1, x + 1.7, 14);
+		}
+		glEnd();
 	}
-	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 }
 
+
+// done
 void right() {
 	// top blue part
 	glEnable(GL_TEXTURE_2D); {
@@ -1534,8 +1791,8 @@ void right() {
 		glNormal3f(1.0, 0.0, 0.0);
 		glBegin(GL_POLYGON); {
 			glTexCoord2f(0, 0); glVertex3f(28.1, -0.2, 6);
-			glTexCoord2f(1, 0); glVertex3f(28.1, -0.2, 16);
-			glTexCoord2f(1, 1); glVertex3f(28.1, 0.3, 16);
+			glTexCoord2f(3, 0); glVertex3f(28.1, -0.2, 16);
+			glTexCoord2f(3, 1); glVertex3f(28.1, 0.3, 16);
 			glTexCoord2f(0, 1); glVertex3f(28.1, 0.3, 6);
 		}
 		glEnd();
@@ -1547,8 +1804,8 @@ void right() {
 		glNormal3f(1.0, 0.0, 0.0);
 		glBegin(GL_POLYGON); {
 			glTexCoord2f(0, 0); glVertex3f(28.1, 5, 6);
-			glTexCoord2f(1, 0); glVertex3f(28.1, 5, 16);
-			glTexCoord2f(1, 1); glVertex3f(28.1, 4.5, 16);
+			glTexCoord2f(3, 0); glVertex3f(28.1, 5, 16);
+			glTexCoord2f(3, 1); glVertex3f(28.1, 4.5, 16);
 			glTexCoord2f(0, 1); glVertex3f(28.1, 4.5, 6);
 		}
 		glEnd();
@@ -1584,46 +1841,103 @@ void right() {
 
 	// big tower
 	glPushMatrix(); {
-		glColor3f(0, 1, 0);
+		glColor3f(1, 1, 1);
 		glTranslatef(28, 21.5, 1.5);
 		GLUquadric *quad;
 		quad = gluNewQuadric();
-		gluCylinder(quad, 1.5, 1.5, 16.5, 20, 20);
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(8, 10, 5); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, back_tower);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 1.5, 1.5, 16.5, 20, 20);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 	}
 	glPopMatrix();
 	glPushMatrix(); {
-		glColor3f(0, 0, 1);
+		glColor3f(1, 1, 1);
 		glTranslatef(28, 21.5, 0);
 		GLUquadric *quad;
 		quad = gluNewQuadric();
-		gluCylinder(quad, 1.5, 1.5, 1.5, 20, 20);
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(8, 1, 5); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, back_tower_base);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 1.5, 1.5, 1.5, 20, 20);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 	}
 	glPopMatrix();
 	
 	glPushMatrix(); {
-		glColor3f(0, 0, 1);
+		glColor3f(1, 1, 1);
 		glTranslatef(28, 21.5, 18);
 		GLUquadric *quad;
 		quad = gluNewQuadric();
-		gluCylinder(quad, 1.5, 1.5, 1, 20, 20);
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(8, 1, 1); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 1.5, 1.5, 1, 20, 20);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 	}
 	glPopMatrix();
 }
 
+// done
 void back() {
 	thirdPart(-1);
 	secondPart(-1); 
 	firstPart(-1);
 }
 
+// done
 void sentryRoom(bool roof) {
 	GLUquadric *quad = gluNewQuadric();
 	
 	if (!roof) {
-		glColor3f(1, 0, 1);
 		
 		// first base
-		gluCylinder(quad, 5, 5, 3, 6, 100);
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(60, 1, 1); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, border);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 5, 5, 3, 6, 100);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 		
 		// second base khaj
 		glColor3f(1, 1, 1);
@@ -1647,21 +1961,31 @@ void sentryRoom(bool roof) {
 			for (int j = 0; j < 3; j++) {
 				glPushMatrix(); {
 					glTranslatef(x1 + delx*j, y1 + dely*j, 3);
+					glEnable(GL_TEXTURE_2D);	
+					glBindTexture(GL_TEXTURE_2D, smallwall_top);
+					gluQuadricNormals(quad, GLU_SMOOTH);
+					gluQuadricTexture(quad, GLU_TRUE);
 					gluCylinder(quad, 0.3, 0.3, 2.1, 4, 100);
+					glDisable(GL_TEXTURE_2D);
+					
+					
 
 
 				}
 				glPopMatrix();
 				glPushMatrix(); {
 					glTranslatef(0, 0, 3);
-					glBegin(GL_QUADS); {
-						glVertex3f(x1 + delx*j, y1 + dely*j, 0);
-						glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
-						glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
-						glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
 
-					}
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, smallwall_top);
+					glNormal3f(1.0, 0.0, 0.0);
+					glBegin(GL_POLYGON);
+					glTexCoord2f(0, 0); glVertex3f(x1 + delx*j, y1 + dely*j, 0);
+					glTexCoord2f(1, 0); glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
+					glTexCoord2f(1, 1); glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
+					glTexCoord2f(0, 1); glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
 					glEnd();
+					glDisable(GL_TEXTURE_2D);
 				}
 				glPopMatrix();
 			}
@@ -1671,38 +1995,77 @@ void sentryRoom(bool roof) {
 	}
 	// second base
 	glPushMatrix(); {
-		glColor3f(1, 0, 1);
 		glTranslatef(0, 0, 3);
-		gluCylinder(quad, 8, 8, 2, 6, 100);
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(60, 1, 1); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, border);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 8, 8, 2, 6, 100);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 	}
 	glPopMatrix();
 	// first base floor
 	glColor3f(1, 1, 1);
-	glBegin(GL_QUADS); {
-		glVertex3f(7, -4, 3);
-		glVertex3f(7, 4, 3);
-		glVertex3f(-7, 4, 3);
-		glVertex3f(-7, -4, 3);
-	}
-	glEnd(); 
-	glBegin(GL_TRIANGLES); {
-		glVertex3f(7, 4, 3);
-		glVertex3f(-7, 4, 3);
-		glVertex3f(0, 8, 3);
-	}
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, thirdpart);
+	glNormal3f(1.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex3f(7, -4, 3);
+	glTexCoord2f(1, 0); glVertex3f(-7, -4, 3);
+	glTexCoord2f(1, 1); glVertex3f(-7, 4, 3);
+	glTexCoord2f(0, 1); glVertex3f(7, 4, 3);
 	glEnd();
-	glBegin(GL_TRIANGLES); {
-		glVertex3f(7, -4, 3);
-		glVertex3f(-7, -4, 3);
-		glVertex3f(0, -8, 3);
-	}
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, thirdpart);
+	glNormal3f(1.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex3f(7, 4, 3);
+	glTexCoord2f(1, 0); glVertex3f(-7, 4, 3);
+	glTexCoord2f(1, 1); glVertex3f(0, 8, 3);
+	glTexCoord2f(0, 1); glVertex3f(0, 8, 3);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, thirdpart);
+	glNormal3f(1.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex3f(7, -4, 3);
+	glTexCoord2f(1, 0); glVertex3f(-7, -4, 3);
+	glTexCoord2f(1, 1); glVertex3f(0, -8, 3);
+	glTexCoord2f(0, 1); glVertex3f(0, -8, 3);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
+
 	// vitorer cylinder (main room)
 	for (double i = 0; i < 0.5; i += 0.1) {
 		glPushMatrix(); {
-			glColor3f(1, 0, 0);
 			glTranslatef(0, 0, 3);
-			gluCylinder(quad, 4-i, 4-i, 1, 6, 100);
+			glEnable(GL_TEXTURE_2D);
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix(); {
+				glScalef(60, 1, 1); // This scaling controls the number of texture repetitions 
+				glBindTexture(GL_TEXTURE_2D, border);
+				gluQuadricNormals(quad, GLU_SMOOTH);
+				gluQuadricTexture(quad, GLU_TRUE);
+
+				glMatrixMode(GL_MODELVIEW);
+				gluCylinder(quad, 4-i, 4-i, 1, 6, 100);
+				glMatrixMode(GL_TEXTURE);
+			} glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+			glMatrixMode(GL_MODELVIEW);
+			
 		}
 		glPopMatrix();
 	}
@@ -1712,14 +2075,27 @@ void sentryRoom(bool roof) {
 		double r = 4;
 		glPushMatrix(); {
 			glTranslatef(r*sin(theta), r*cos(theta), 3);
-			glColor3f(1, 0, 0);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
 			gluCylinder(quad, 0.3, 0.3, 1, 60, 100);
-			glColor3f(1, 1, 0);
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
 			gluCylinder(quad, 0.2, 0.2, 5, 60, 100);
+			glDisable(GL_TEXTURE_2D);
 			glPushMatrix(); {
 				glTranslatef(0, 0, 5);
-				glColor3f(1, 0, 0);
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, smallwall_top);
+				gluQuadricNormals(quad, GLU_SMOOTH);
+				gluQuadricTexture(quad, GLU_TRUE);
 				gluCylinder(quad, 0.3, 0.3, 2, 60, 100);
+				glDisable(GL_TEXTURE_2D);
+				
 			}
 			glPopMatrix();
 		}
@@ -1736,27 +2112,47 @@ void sentryRoom(bool roof) {
 		double x2 = r*sin(theta2);
 		double y2 = r*cos(theta2);
 		double z2 = 10;
-		glBegin(GL_QUADS); {
-			glVertex3f(x1, y1, z2);
-			glVertex3f(x1, y1, z1);
-			glVertex3f((x1 + x2) / 2, (y1 + y2)/2, z2-1);
-			glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
-		}
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, border);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON);
+		glTexCoord2f(0, 0); glVertex3f(x1, y1, z2);
+		glTexCoord2f(1, 0); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
+		glTexCoord2f(1, 1); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
+		glTexCoord2f(0, 1); glVertex3f(x1, y1, z1);
 		glEnd();
-		glBegin(GL_QUADS); {
-			glVertex3f(x2, y2, z2);
-			glVertex3f(x2, y2, z1);
-			glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
-			glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
-		}
+		glDisable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, border);
+		glNormal3f(1.0, 0.0, 0.0);
+		glBegin(GL_POLYGON);
+		glTexCoord2f(0, 0); glVertex3f(x2, y2, z2);
+		glTexCoord2f(1, 0); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
+		glTexCoord2f(1, 1); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
+		glTexCoord2f(0, 1); glVertex3f(x2, y2, z1);
 		glEnd();
+		glDisable(GL_TEXTURE_2D);
 	}
 
 	// roof
 	glPushMatrix(); {
-		glColor3f(1, 0, 1);
+
 		glTranslatef(0, 0, 9.2);
-		gluCylinder(quad, 9, 4, 1, 8, 100);
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(60, 1, 1); // This scaling controls the number of texture repetitions 
+			glBindTexture(GL_TEXTURE_2D, border);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 9, 4, 1, 8, 100);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		
 		// dome
 		glPushMatrix(); {
 			glTranslatef(0, 0, -2.5);
@@ -1768,9 +2164,15 @@ void sentryRoom(bool roof) {
 	glPopMatrix();
 	for (double i = 0; i < 0.5; i += 0.1) {
 		glPushMatrix(); {
-			glColor3f(1, 0, 1);
+
 			glTranslatef(0, 0, 10.2);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, smallwall_top);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
 			gluCylinder(quad, 4 - i, 4 - i, 0.5, 8, 100);
+			glDisable(GL_TEXTURE_2D);
+			
 		}
 		glPopMatrix();
 		
@@ -1780,15 +2182,19 @@ void sentryRoom(bool roof) {
 	
 }
 
+// done
 void roof() {
-	glColor3f(0.6, 0.6, 0.6);
-	glBegin(GL_QUADS); {
-		glVertex3f(0, 0, 18);
-		glVertex3f(0, 20, 18);
-		glVertex3f(27, 20, 18);
-		glVertex3f(27, 0, 18);
-	}
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, border);
+	glNormal3f(1.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex3f(0, 0, 18);
+	glTexCoord2f(5, 0); glVertex3f(27, 0, 18);
+	glTexCoord2f(5, 5); glVertex3f(27, 20, 18);
+	glTexCoord2f(0, 5); glVertex3f(0, 20, 18);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 	glPushMatrix(); {
 		glTranslatef(24, 3, 18);
 		glScalef(0.5, 0.5, 0.5);
@@ -1804,6 +2210,7 @@ void roof() {
 	
 }
 
+// done
 void smallWall(int i) {
 	double x = 28 + 5*i;
 	glColor3f(1, 1, 1);
@@ -1905,49 +2312,103 @@ void smallWall(int i) {
 
 }
 
+// done
 void watchTower() {
 	// bottom
 	GLUquadric *quad = gluNewQuadric();
-	gluCylinder(quad, 15, 15, 10, 8, 50);
+	
+	glEnable(GL_TEXTURE_2D); {
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix(); {
+			glScalef(8, 1, 1); 
+			glBindTexture(GL_TEXTURE_2D, border);
+			gluQuadricNormals(quad, GLU_SMOOTH);
+			gluQuadricTexture(quad, GLU_TRUE);
+
+			glMatrixMode(GL_MODELVIEW);
+			gluCylinder(quad, 15, 15, 10, 8, 50);
+			glMatrixMode(GL_TEXTURE);
+		} glPopMatrix();
+	}
+	
+	glDisable(GL_TEXTURE_2D);
+	glMatrixMode(GL_MODELVIEW);
+	
 	glPushMatrix(); {
 		glPushMatrix(); {
-			glColor3f(1, 0, 1);
 			glTranslatef(0, 0, 10);
-			gluCylinder(quad, 17, 17, 2, 8, 100);
-			// floor
-			glColor3f(0, 1, 0);
-			glBegin(GL_QUADS); {
-				glVertex3f(12, 12, 0);
-				glVertex3f(12, -12, 0);
-				glVertex3f(-12, -12, 0);
-				glVertex3f(-12, 12, 0);
+			glEnable(GL_TEXTURE_2D); {
+				glMatrixMode(GL_TEXTURE);
+				glPushMatrix(); {
+					glScalef(60, 1, 1);
+					glBindTexture(GL_TEXTURE_2D, border);
+					gluQuadricNormals(quad, GLU_SMOOTH);
+					gluQuadricTexture(quad, GLU_TRUE);
+					glMatrixMode(GL_MODELVIEW);
+					gluCylinder(quad, 17, 17, 2, 8, 100);
+					glMatrixMode(GL_TEXTURE);
+				} glPopMatrix();
 			}
-			glEnd();
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(12, 12, 0);
-				glVertex3f(12, -12, 0);
-				glVertex3f(15, 0, 0);
-			}
-			glEnd();
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(-12, 12, 0);
-				glVertex3f(-12, -12, 0);
-				glVertex3f(-15, 0, 0);
-			}
-			glEnd();
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(12, 12, 0);
-				glVertex3f(-12, 12, 0);
-				glVertex3f(0, 15, 0);
-			}
-			glEnd();
 
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(12, -12, 0);
-				glVertex3f(-12, -12, 0);
-				glVertex3f(0, -15, 0);
+			glDisable(GL_TEXTURE_2D);
+			glMatrixMode(GL_MODELVIEW);
+			
+			// floor
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-12, 12, 0);
+				glTexCoord2f(1, 1); glVertex3f(-12, -12, 0);
+				glTexCoord2f(0, 1); glVertex3f(12, -12, 0);
+				glEnd();
 			}
-			glEnd();
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(15, 0, 0);
+				glTexCoord2f(1, 1); glVertex3f(15, 0, 0);
+				glTexCoord2f(0, 1); glVertex3f(12, -12, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(-12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-15, 0, 0);
+				glTexCoord2f(1, 1); glVertex3f(-15, 0, 0);
+				glTexCoord2f(0, 1); glVertex3f(-12, -12, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-12, 12, 0);
+				glTexCoord2f(1, 1); glVertex3f(0, 15, 0);
+				glTexCoord2f(0, 1); glVertex3f(0, 15, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, -12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-12, -12, 0);
+				glTexCoord2f(1, 1); glVertex3f(0, -15, 0);
+				glTexCoord2f(0, 1); glVertex3f(0, -15, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
 		}
 		glPopMatrix();	
 		// second base khaj
@@ -1973,21 +2434,28 @@ void watchTower() {
 			for (int j = 0; j < 3; j++) {
 				glPushMatrix(); {
 					glTranslatef(x1 + delx*j, y1 + dely*j, 3);
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, smallwall_top); // here texid corresponds a bitmap image.
+					gluQuadricNormals(quad, GLU_SMOOTH);
+					gluQuadricTexture(quad, GLU_TRUE);
 					gluCylinder(quad, 0.3, 0.3, 2.1, 4, 100);
-					
+					glDisable(GL_TEXTURE_2D);
 
 				}
 				glPopMatrix();
 				glPushMatrix(); {
 					glTranslatef(0, 0, 3);
-					glBegin(GL_QUADS); {
-						glVertex3f(x1 + delx*j, y1 + dely*j, 0);
-						glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
-						glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
-						glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
-
+					glEnable(GL_TEXTURE_2D); {
+						glBindTexture(GL_TEXTURE_2D, smallwall_top);
+						glNormal3f(1.0, 0.0, 0.0);
+						glBegin(GL_POLYGON);
+						glTexCoord2f(0, 0); glVertex3f(x1 + delx*j, y1 + dely*j, 0);
+						glTexCoord2f(1, 0); glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
+						glTexCoord2f(1, 1); glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
+						glTexCoord2f(0, 1); glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
+						glEnd();
 					}
-					glEnd();
+					glDisable(GL_TEXTURE_2D);
 				}
 				glPopMatrix();
 			}
@@ -2001,9 +2469,23 @@ void watchTower() {
 		// vitorer cylinder (main room)
 		for (double i = 0; i < 0.5; i += 0.1) {
 			glPushMatrix(); {
-				glColor3f(1, 0, 0);
 				glTranslatef(0, 0, 2);
-				gluCylinder(quad, 13 - i, 13 - i, 1, 8, 100);
+				glEnable(GL_TEXTURE_2D); {
+					glMatrixMode(GL_TEXTURE);
+					glPushMatrix(); {
+						glScalef(60, 1, 1);
+						glBindTexture(GL_TEXTURE_2D, border);
+						gluQuadricNormals(quad, GLU_SMOOTH);
+						gluQuadricTexture(quad, GLU_TRUE);
+						glMatrixMode(GL_MODELVIEW);
+						gluCylinder(quad, 13 - i, 13 - i, 1, 8, 100);
+						glMatrixMode(GL_TEXTURE);
+					} glPopMatrix();
+				}
+
+				glDisable(GL_TEXTURE_2D);
+				glMatrixMode(GL_MODELVIEW);
+				
 			}
 			glPopMatrix();
 		}
@@ -2022,14 +2504,21 @@ void watchTower() {
 				glPushMatrix(); {
 					glTranslatef(x1 + delx*j, y1 + dely*j, 3);
 					//gluCylinder(quad, 0.3, 0.3, 2.1, 4, 100);
-					glColor3f(1, 0, 0);
-					gluCylinder(quad, 0.3, 0.3, 1, 60, 100);
-					glColor3f(1, 1, 0);
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, border); // here texid corresponds a bitmap image.
+					gluQuadricNormals(quad, GLU_SMOOTH);
+					gluQuadricTexture(quad, GLU_TRUE);
 					gluCylinder(quad, 0.2, 0.2, 5, 60, 100);
+					glDisable(GL_TEXTURE_2D);
 					glPushMatrix(); {
 						glTranslatef(0, 0, 5);
-						glColor3f(1, 0, 0);
+						glEnable(GL_TEXTURE_2D);
+						glBindTexture(GL_TEXTURE_2D, border); // here texid corresponds a bitmap image.
+						gluQuadricNormals(quad, GLU_SMOOTH);
+						gluQuadricTexture(quad, GLU_TRUE);
 						gluCylinder(quad, 0.3, 0.3, 2, 60, 100);
+						glDisable(GL_TEXTURE_2D);
+						
 					}
 					glPopMatrix();
 
@@ -2050,20 +2539,28 @@ void watchTower() {
 			double x2 = r*sin(theta2);
 			double y2 = r*cos(theta2);
 			double z2 = 10;
-			glBegin(GL_QUADS); {
-				glVertex3f(x1, y1, z2);
-				glVertex3f(x1, y1, z1);
-				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
-				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
-			}
+
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, border);
+			glNormal3f(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON);
+			glTexCoord2f(0, 0); glVertex3f(x1, y1, z2);
+			glTexCoord2f(1, 0); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
+			glTexCoord2f(1, 1); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
+			glTexCoord2f(0, 1); glVertex3f(x1, y1, z1);
 			glEnd();
-			glBegin(GL_QUADS); {
-				glVertex3f(x2, y2, z2);
-				glVertex3f(x2, y2, z1);
-				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
-				glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
-			}
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, border);
+			glNormal3f(1.0, 0.0, 0.0); 
+			glBegin(GL_POLYGON);
+			glTexCoord2f(0, 0); glVertex3f(x2, y2, z2);
+			glTexCoord2f(1, 0); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2);
+			glTexCoord2f(1, 1); glVertex3f((x1 + x2) / 2, (y1 + y2) / 2, z2 - 1);
+			glTexCoord2f(0, 1); glVertex3f(x2, y2, z1);
 			glEnd();
+			glDisable(GL_TEXTURE_2D);
+		
 		}
 
 		
@@ -2072,43 +2569,80 @@ void watchTower() {
 	// fourth base
 	glPushMatrix(); {
 		glPushMatrix(); {
-			glColor3f(1, 0, 1);
 			glTranslatef(0, 0, 20);
-			gluCylinder(quad, 17, 17, 2, 8, 100);
-			// floor
-			glColor3f(0, 1, 0);
-			glBegin(GL_QUADS); {
-				glVertex3f(12, 12, 0);
-				glVertex3f(12, -12, 0);
-				glVertex3f(-12, -12, 0);
-				glVertex3f(-12, 12, 0);
+			glEnable(GL_TEXTURE_2D); {
+				glMatrixMode(GL_TEXTURE);
+				glPushMatrix(); {
+					glScalef(60, 1, 1);
+					glBindTexture(GL_TEXTURE_2D, border);
+					gluQuadricNormals(quad, GLU_SMOOTH);
+					gluQuadricTexture(quad, GLU_TRUE);
+					glMatrixMode(GL_MODELVIEW);
+					gluCylinder(quad, 17, 17, 2, 8, 100);
+					glMatrixMode(GL_TEXTURE);
+				} glPopMatrix();
 			}
-			glEnd();
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(12, 12, 0);
-				glVertex3f(12, -12, 0);
-				glVertex3f(15, 0, 0);
-			}
-			glEnd();
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(-12, 12, 0);
-				glVertex3f(-12, -12, 0);
-				glVertex3f(-15, 0, 0);
-			}
-			glEnd();
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(12, 12, 0);
-				glVertex3f(-12, 12, 0);
-				glVertex3f(0, 15, 0);
-			}
-			glEnd();
 
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(12, -12, 0);
-				glVertex3f(-12, -12, 0);
-				glVertex3f(0, -15, 0);
+			glDisable(GL_TEXTURE_2D);
+			glMatrixMode(GL_MODELVIEW);
+			
+			// floor
+
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-12, 12, 0);
+				glTexCoord2f(1, 1); glVertex3f(-12, -12, 0);
+				glTexCoord2f(0, 1); glVertex3f(12, -12, 0);
+				glEnd();
 			}
-			glEnd();
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(15, 0, 0);
+				glTexCoord2f(1, 1); glVertex3f(15, 0, 0);
+				glTexCoord2f(0, 1); glVertex3f(12, -12, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(-12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-15, 0, 0);
+				glTexCoord2f(1, 1); glVertex3f(-15, 0, 0);
+				glTexCoord2f(0, 1); glVertex3f(-12, -12, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, 12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-12, 12, 0);
+				glTexCoord2f(1, 1); glVertex3f(0, 15, 0);
+				glTexCoord2f(0, 1); glVertex3f(0, 15, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D); {
+				glBindTexture(GL_TEXTURE_2D, thirdpart);
+				glNormal3f(1.0, 0.0, 0.0);
+				glBegin(GL_POLYGON);
+				glTexCoord2f(0, 0); glVertex3f(12, -12, 0);
+				glTexCoord2f(1, 0); glVertex3f(-12, -12, 0);
+				glTexCoord2f(1, 1); glVertex3f(0, -15, 0);
+				glTexCoord2f(0, 1); glVertex3f(0, -15, 0);
+				glEnd();
+			}
+			glDisable(GL_TEXTURE_2D);
 		}
 		glPopMatrix();
 		// second base khaj
@@ -2134,21 +2668,29 @@ void watchTower() {
 			for (int j = 0; j < 3; j++) {
 				glPushMatrix(); {
 					glTranslatef(x1 + delx*j, y1 + dely*j, 3);
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, smallwall_top); // here texid corresponds a bitmap image.
+					gluQuadricNormals(quad, GLU_SMOOTH);
+					gluQuadricTexture(quad, GLU_TRUE);
 					gluCylinder(quad, 0.3, 0.3, 2.1, 4, 100);
+					glDisable(GL_TEXTURE_2D); 
 
 
 				}
 				glPopMatrix();
 				glPushMatrix(); {
-					glTranslatef(0, 0, 3);
-					glBegin(GL_QUADS); {
-						glVertex3f(x1 + delx*j, y1 + dely*j, 0);
-						glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
-						glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
-						glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
-
+					glTranslatef(0, 0, 3); 
+					glEnable(GL_TEXTURE_2D); {
+						glBindTexture(GL_TEXTURE_2D, smallwall_top);
+						glNormal3f(1.0, 0.0, 0.0);
+						glBegin(GL_POLYGON);
+						glTexCoord2f(0, 0); glVertex3f(x1 + delx*j, y1 + dely*j, 0);
+						glTexCoord2f(1, 0); glVertex3f(x3 + delx2*j, y3 + dely2*j, 0);
+						glTexCoord2f(1, 1); glVertex3f(x3 + delx2*j, y3 + dely2*j, -2);
+						glTexCoord2f(0, 1); glVertex3f(x1 + delx*j, y1 + dely*j, -0.5);
+						glEnd();
 					}
-					glEnd();
+					glDisable(GL_TEXTURE_2D);
 				}
 				glPopMatrix();
 			}
@@ -2165,6 +2707,7 @@ void watchTower() {
 	
 }
 
+// done
 void baseWall(int i) {
 	double x = 5.7 * i;
 	glColor3f(1, 1, 1);
@@ -2187,19 +2730,28 @@ void baseWall(int i) {
 		glEnable(GL_TEXTURE_2D); {
 			glScalef(0.7, 0.7, 1);
 			glTranslatef(95, 0, 0);
-			GLUquadric *quad = gluNewQuadric();
-			glBindTexture(GL_TEXTURE_2D, basewall); // here texid corresponds a bitmap image.
-			gluQuadricNormals(quad, GLU_SMOOTH);
-			gluQuadricTexture(quad, GLU_TRUE);
-			gluCylinder(quad, 15, 15, 10, 8, 50);
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix(); {
+				glScalef(7, 1, 1);
+				GLUquadric *quad = gluNewQuadric();
+				glBindTexture(GL_TEXTURE_2D, basewall); // here texid corresponds a bitmap image.
+				gluQuadricNormals(quad, GLU_SMOOTH);
+				
+				gluQuadricTexture(quad, GLU_TRUE);
+				glMatrixMode(GL_MODELVIEW);
+				gluCylinder(quad, 15, 15, 10, 8, 50);
+				glMatrixMode(GL_TEXTURE);
+			}
+			glPopMatrix();			
 
 		}
 		glDisable(GL_TEXTURE_2D);
-		
+		glMatrixMode(GL_MODELVIEW);		
 	}
 	glPopMatrix();
 }
 
+// done
 void baseWallRight(int i) {
 	double y = 5.7 * i;
 	glColor3f(1, 1, 1);
@@ -2220,14 +2772,17 @@ void baseWallRight(int i) {
 }
 
 void base() {
-	glColor3f(0.7, 0.7, 1);
-	glBegin(GL_QUADS); {	//front
-		glVertex3f(0, 0, -1);
-		glVertex3f(0, 86, -1);
-		glVertex3f(69.5, 86, -1);
-		glVertex3f(69.5, 0, -1);
-	}
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, base_tex);
+	glNormal3f(1.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0, 0); glVertex3f(0, 0, -1);
+	glTexCoord2f(5, 0); glVertex3f(69.5, 0, -1);
+	glTexCoord2f(5, 5); glVertex3f(69.5, 86, -1);
+	glTexCoord2f(0, 5); glVertex3f(0, 86, -1);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 }
 
 void part() {
